@@ -22,7 +22,7 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_kanban_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//templates//field[@name='lst_price']" position="attributes">
+            <xpath expr="//templates//div[@name='product_lst_price']" position="attributes">
                 <attribute name="groups">product_hide_sale_cost_price.group_product_sale_price</attribute>
             </xpath>
         </field>
