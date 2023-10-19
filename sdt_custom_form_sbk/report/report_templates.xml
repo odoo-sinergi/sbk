@@ -1,0 +1,26 @@
+<odoo>
+    <record id="paperformat_sdt_standard_form_sj_delivery" model="report.paperformat">
+            <field name="name">SDT Standard Form SJ</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">10</field>
+            <field name="dpi">80</field>
+        </record>
+        <report id="report_standard_surat_jalan_menu"
+                string="SDT Standard - Surat Jalan"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                file="stock.picking"
+                name="sdt_form_inastek.standard_surat_jalan_report"
+                paperformat="sdt_form_inastek.paperformat_sdt_standard_form_sj_delivery"
+                print_report_name="'Surat Jalan - %s' % (object.name)">
+        </report>
+</odoo>

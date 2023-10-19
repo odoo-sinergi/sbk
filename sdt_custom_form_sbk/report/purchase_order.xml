@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+
+        <template id="sdt_report_purchaseorder_document_inherit" inherit_id="purchase.report_purchaseorder_document">
+            <xpath expr="//p[@class='mt-4']" position="after">
+                <div class="row">
+                    <div class="col-12"> 
+                        <p>
+                            - Penagihan silahkan email ke ellen@sumberberliankimia.co.id <br/>
+                            - Hardcopy Invoice, Surat Jalan &amp; Faktur Pajak semua via email <br/>
+                            - Jika Lunas, hardcopy tidak perlu dikirimkan <br/>
+                        </p>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//div[@id='informations']" position="inside">
+                <div t-elif="o.payment_term_id" class="col-3 bm-2">
+                    <strong>Payment Term:</strong>
+                    <p t-field="o.payment_term_id" class="m-0"/>
+                </div>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
