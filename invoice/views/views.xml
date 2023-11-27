@@ -1,0 +1,112 @@
+<odoo>
+  <data>
+       <record id="account.action_invoice_tree1" model="ir.actions.act_window">
+            <field name="name">Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('create_uid','=',uid),('type','=','out_invoice')]</field>
+            <field name="context">{'type':'out_invoice', 'journal_type': 'sale'}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a customer invoice
+              </p><p>
+                Create invoices, register payments and keep track of the discussions with your customers.
+              </p>
+            </field>
+        </record>
+      <record id="view_move_form_inherit" model="ir.ui.view">
+        <field name="name">account.invoice.form.agent</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form" />
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='payment_term_id']" position="after">
+              <field name="add_total"/>
+              <field name="fee_type"/>
+              <field name="fee_amount"/>
+              <field name="other_cost"/>
+              <field name="total_cost" invisible="1"/>
+              <field name="profit" invisible="1"/>
+              <field name="yearzz" invisible="1"/>
+              <field name="week" invisible="1"/>
+              <field name="monthzz" invisible="1"/>
+          </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="after">
+                <field name="product_cost"/>
+
+            </xpath>
+        </field>
+      </record>
+      <record id="view_invoice_fee" model="ir.ui.view">
+        <field name="name">invoice.fee.form.view</field>
+        <field name="model">invoice.fee</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="confirm" type="object" string="Confirm" states="draft" class="btn-primary" groups="base.group_user"/>
+                     <field name="state" widget="statusbar" string="confirm"
+                                        statusbar_visible="draft,confirm"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="month" attrs="{'readonly':[('state','in','confirm')]}"/>
+                        </group>
+                        <group>
+                            <field name="year" attrs="{'readonly':[('state','in','confirm')]}"/>
+                        </group>
+                        <group>
+                            <field name="fee_type" attrs="{'readonly':[('state','in','confirm')]}"/>
+                        </group>
+                        <group>
+                            <field name="remarks"/>
+                        </group>
+                        <group>
+                            <field name="journal_id" default="Credit Card Fees (USD)"/>
+                        </group>
+                        <group>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="inv_lines" nolabel="1" attrs="{'readonly':[('state','in','confirm')]}">
+                            <tree editable="bottom">
+                                <field name="invoice_no" options="{'no_create':true,'no_create_edit':true}" domain="[('type','=','out_invoice'), ('state', '=', 'paid')]"/>
+                                <field name="fee_type"/>
+                                <field name="invoice_amount" />
+                                <field name="fee_amount" sum="Total"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+      </record>
+      <record id="tree_invoice_fee" model="ir.ui.view">
+            <field name="name">invoice.fee.tree</field>
+            <field name="model">invoice.fee</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="month"/>
+                    <field name="year"/>
+                    <field name="fee_type"/>
+                </tree>
+            </field>
+      </record>
+      <record id="action_invoice_fee" model="ir.actions.act_window">
+            <field name="name">Invoices Fee</field>
+            <field name="res_model">invoice.fee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+
+      </record>
+        <menuitem id="invoice_fee" name="Invoice Fee" parent="account.menu_finance_receivables" action="action_invoice_fee"/>
+        <menuitem id="invoic_parent" name="Invoices" web_icon="invoice,static/src/img/invoice_icon.png" />
+        <menuitem id="invoice_menu" name="Invoices" parent="invoic_parent"/>
+        <menuitem id="invoice_child_menu" name="Invoice" parent="invoice_menu" action="account.action_invoice_tree1"/>
+
+  </data>
+</odoo>

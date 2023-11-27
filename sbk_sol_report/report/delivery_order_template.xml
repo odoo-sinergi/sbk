@@ -1,0 +1,343 @@
+<odoo>
+	<data>
+		<template id="delivery_ex_layout">
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <t t-if="company.external_report_layout == 'background'">
+                <t t-call="web.external_layout_background"><t t-raw="0"/></t>
+            </t>
+            <t t-if="company.external_report_layout == 'boxed'">
+                <t t-call="web.external_layout_boxed"><t t-raw="0"/></t>
+            </t>
+            <t t-if="company.external_report_layout == 'clean'">
+                <t t-call="web.external_layout_clean"><t t-raw="0"/></t>
+            </t>
+            <t t-if="company.external_report_layout in (False, 'standard')">
+                <t t-call="sbk_sol_report.external_layout_sbk">
+                    <t t-raw="0" />
+                </t>
+            </t>
+		</template>
+		<template id="external_layout_sbk">
+			<div class="header" style="margin-bottom:0.6em; padding-bottom:0.6em;">
+                <style>
+                    .mbox{width:100%; border-collapse: collapse;border:1px solid #000; border-radius:0.7em}
+                    .mbox-header{font-weight:bold;border-bottom:1px dotted #000000;width:95%;margin:0.4em}
+                    .mbox-body{width:100%;margin:0.4em}
+                </style>
+                <div class="row">
+                    <div class="col-xs-7">
+                        <div class="row">
+                            <div class="col-xs-2"></div>
+                            <div class="col-xs-10">
+                                <div class="mbox">
+                                    <div class="mbox-header">
+                                        <span t-esc="company.display_name" />
+                                    </div>
+                                    <div class="mbox-body">
+                                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: true}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-5" style="padding-top:1.5em">
+                        <h2>Delivery Order</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="article o_report_layout_standard">
+                <t t-raw="0" />
+            </div>
+		</template>
+		<template id="delivery_sbk_doc" inherit_id="stock.report_delivery_document">
+			<xpath expr="//t[@t-name='stock.report_delivery_document']" position="replace">
+				<t t-name="stock.report_delivery_document">
+					<t t-call="web.html_container">
+						<t t-call="sbk_sol_report.delivery_ex_layout">
+							<t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+							<div class="page">
+                                <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False" />
+                                <div class="row" style="margin-bottom:2.3em">
+                                    <div class="col-xs-7">
+                                        <div class="row mb4">
+                                            <div class="col-xs-2" style="padding-top:3.5em">Bill To</div>
+                                            <div class="col-xs-10">
+                                                <div class="mbox" style="width:100%; border-collapse: collapse;border:1px solid #000; border-radius:0.7em">
+                                                    <div class="mbox-header" style="font-weight:bold;border-bottom:1px dotted #000000;width:95%;margin:0.4em;">
+                                                        <span t-field="partner.name" />
+                                                    </div>
+                                                    <div class="mbox-body" style="width:100%;margin:0.4em;">
+                                                        <div t-esc="partner" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True}" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb4">
+                                            <div class="col-xs-2" style="padding-top:3.5em">Ship To</div>
+                                            <div class="col-xs-10">
+                                                <div class="mbox" style="width:100%; border-collapse: collapse;border:1px solid #000; border-radius:0.7em">
+                                                    <div class="mbox-header" style="font-weight:bold;border-bottom:1px dotted #000000;width:95%;margin:0.4em">
+                                                        <span t-field="partner.name" />
+                                                    </div>
+                                                    <div class="mbox-body" style="width:100%;margin:0.4em">
+                                                        <div t-esc="partner" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True}" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <div class="row" style="width:100%; border-collapse: collapse;border:1px solid #000; border-radius:0.6em">
+                                            <div class="col-xs-12">
+                                                <div class="row">
+                                                    <div class="col-xs-6" style="border-right:1px solid #000;text-align:center;font-weight:bold">Delivery Date</div>
+                                                    <div class="col-xs-6" style="text-align:center;font-weight:bold">Delivery No.</div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-xs-6" style="border-right:1px solid #000;padding-top:1.5em;padding-bottom:1.5em">
+                                                        <div style="float:left;width:100%;text-align:left">
+                                                            <t t-if="o.state == 'done'">
+                                                                <span t-field="o.date_done" />
+                                                            </t>
+                                                            <t t-if="o.state != 'done'">
+                                                                <span t-field="o.scheduled_date" />
+                                                            </t>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-6" style="padding-top:1.5em;padding-bottom:1.5em">
+                                                        <span t-field="o.name" style="float:left;width:100%;text-align:left" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" style="border-top:1px dotted #000;">
+                                                    <div class="col-xs-6" style="border-right:1px solid #000;text-align:center;font-weight:bold">Ship Via</div>
+                                                    <div class="col-xs-6" style="text-align:center;font-weight:bold">PO/SO No.</div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-xs-6" style="border-right:1px solid #000;padding-top:1.5em;padding-bottom:1.5em">
+                                                        <span t-field="o.sale_id.shipping_method.name" style="float:left;width:100%;text-align:left" />
+                                                    </div>
+                                                    <div class="col-xs-6" style="padding-top:1.5em;padding-bottom:1.5em">
+                                                       <span t-field="o.sale_id.so_po_number" style="float:left;width:100%;text-align:left" />
+                                                        <!-- <span t-field="o.origin" style="float:left;width:100%;text-align:left" /> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" t-if="not o.move_line_ids">
+                                    <div class="col-xs-12">
+                                        <table class="table table-bordered table-striped table-condensed mt4" >
+                                            <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><strong>No</strong></th>
+                                                    <th class="text-center"><strong>Item Description</strong></th>
+                                                    <th class="text-center"><strong>Disiapkan</strong></th>
+                                                    <th class="text-center"><strong>Supir</strong></th>
+                                                    <th class="text-center"><strong>Note</strong></th>
+                                                    <th class="text-center"><strong>Qty</strong></th>
+                                                    <th class="text-center"><strong>Satuan</strong></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.sale_line_id.product_uom_qty)" />
+                                                <t t-set="total_quantity" t-value="0"/>
+                                                <tr t-foreach="lines" t-as="move">
+                                                    <td class="text-center"><span t-raw="move_index+1"/></td>
+                                                    <td>
+                                                        <span t-field="move.name" />
+                                                        <p t-if="o.picking_type_code == 'outgoing'">
+                                                            <span t-field="move.product_id.sudo().printout_name" />
+                                                        </p>
+                                                        <p t-if="o.picking_type_code == 'incoming'">
+                                                            <span t-field="move.product_id.sudo().description_pickingin" />
+                                                        </p>
+                                                        <p t-if="has_serial_number">Supplier Lot Numer:
+                                                            <span t-field="o.move_line_ids.lot_id.supplier_lot_number"/>
+                                                        </p>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><span t-field="move.note" /></td>
+                                                    <td class="text-center"><span t-field="move.sale_line_id.product_uom_qty" /></td>
+                                                    <td class="text-center"><span t-field="move.sale_line_id.product_uom" /></td>
+                                                    <t t-set="total_quantity" t-value="total_quantity+move.sale_line_id.product_uom_qty"/>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot style="padding-top:6em">
+                                                <td colspan="5" style="border:0"></td>
+                                                <td style="padding-top:15em" class="text-center"><span t-esc="total_quantity"/></td>
+                                                <td style="border:0"></td>
+                                            </tfoot>
+                                        </table>
+                                        <div class="row" style="margin-bottom:2.3em">
+                                            <div class="col-xs-8">
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <strong>Printed By</strong>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <strong>Approved By</strong>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <strong>Shipped By</strong>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <strong>Received By</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:3.2em;float:left;vertical-align: bottom;">Admin SBK</span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:4.5em;float:left;vertical-align: bottom;"></span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:4.5em;float:left;vertical-align: bottom;"></span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:4.5em;float:left;vertical-align: bottom;"></span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <span style="width:100%;float:left;"><strong>Description</strong></span>
+                                                        <span style="border:1px solid #000000;width:100%;padding-top:5.3em;float:left;border-radius:0.7em"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" t-if="o.move_line_ids">
+                                    <div class="col-xs-12">
+                                        <table class="table table-bordered table-striped table-condensed mt4">
+                                            <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center"><strong>No</strong></th>
+                                                    <th class="text-center"><strong>Item Description</strong></th>
+                                                    <th class="text-center"><strong>Disiapkan</strong></th>
+                                                    <th class="text-center"><strong>Supir</strong></th>
+                                                    <th class="text-center"><strong>Note</strong></th>
+                                                    <th class="text-center"><strong>Qty</strong></th>
+                                                    <th class="text-center"><strong>Satuan</strong></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.sale_line_id.product_uom_qty)" />
+                                                <t t-set="total_quantity" t-value="0"/>
+                                                <tr t-foreach="lines" t-as="move">
+                                                    <td class="text-center"><span t-raw="move_index+1"/></td>
+                                                    <td>
+                                                        <span t-field="move.name" />
+                                                        <p t-if="o.picking_type_code == 'outgoing'">
+                                                            <span t-field="move.product_id.sudo().description_pickingout" />
+                                                        </p>
+                                                        <p t-if="o.picking_type_code == 'incoming'">
+                                                            <span t-field="move.product_id.sudo().description_pickingin" />
+                                                        </p>
+                                                        <p t-if="has_serial_number">Supplier Lot Numer:
+                                                            <span t-field="o.move_line_ids.lot_id.supplier_lot_number"/>
+                                                        </p>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><span t-field="move.note" /></td>
+                                                    <td class="text-center"><span t-field="move.sale_line_id.product_uom_qty" /></td>
+                                                    <td class="text-center"><span t-field="move.sale_line_id.product_uom" /></td>
+                                                    <t t-set="total_quantity" t-value="total_quantity+move.sale_line_id.product_uom_qty"/>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <td colspan="5" style="border:0"></td>
+                                                <td style="padding-top:15em" class="text-center"><span t-esc="total_quantity"/></td>
+                                                <td style="border:0"></td>
+                                            </tfoot>
+                                        </table>
+                                        <div class="row" style="margin-bottom:2.3em">
+                                            <div class="col-xs-8">
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <strong>Printed By</strong>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <strong>Approved By</strong>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <strong>Shipped By</strong>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <strong>Received By</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:3.2em;float:left;vertical-align: bottom;">Admin SBK</span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:4.5em;float:left;vertical-align: bottom;"></span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:4.5em;float:left;vertical-align: bottom;"></span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <span style="border-bottom:1px solid #000000;width:100%;padding-top:4.5em;float:left;vertical-align: bottom;"></span>
+                                                        <span style="width:100%;float:left">Date:</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <span style="width:100%;float:left;"><strong>Description</strong></span>
+                                                        <span style="border:1px solid #000000;width:100%;padding-top:5.3em;float:left;border-radius:0.7em"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<p t-if="o.backorder_id">
+									This shipment is a backorder of
+									<t t-esc="o.backorder_id.name" />
+									.
+								</p>
+								<p>
+									<t t-if="o.search([('backorder_id', '=', o.id), ('state', 'not in', ['cancel', 'done'])])">
+										All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
+									</t>
+								</p>
+							</div>
+						</t>
+					</t>
+				</t>
+			</xpath>
+		</template>
+
+	</data>
+</odoo>

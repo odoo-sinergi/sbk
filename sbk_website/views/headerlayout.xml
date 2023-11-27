@@ -1,0 +1,153 @@
+<odoo>
+    <template id="template_header_style_6_inherit" inherit_id="customize_theme.template_header_style_6"
+		name="Header Style 6">
+		<!-- <xpath expr="//div[hasclass('main-header')]" position="replace"> </xpath> -->
+		<xpath expr="//div[hasclass('main-header-before')]" position="replace">
+			<div class="main-header-before header_style_two_main header_style_5_div">
+
+				<div class="main-header-before-maxW">
+					<div class="main-header-right">
+						<!-- <div style="display: inline-block;letter-spacing: 1px;font-family: oswald-regular;color: #fff;font-size:13px;">
+							<div>Ecommerce:marketing03@sumberberliankimia.co.id  087765757572, marketing05@sumberberliankimia.co.id  085697542083</div>
+							<div>Industries:marketing01@sumberberliankimia.co.id  085697542319, marketing02@sumberberliankimia.co.id  085697542312, marketing04@sumberberliankimia.co.id  085697542071</div>
+							<div>Import Department:ellen@sumberberliankimia.co.id 085697542085</div>
+            			</div> -->
+						<div class="company_pricelist">
+							<t t-set="website_sale_pricelists" t-value="website.get_pricelist_available(show_visible=True)" />
+							<div
+								t-attf-class="#{website_sale_pricelists and len(website_sale_pricelists)&gt;1 and 'main-header-left' or 'hidden'}">
+								<div class="company_pricelist_container">
+									<t t-call="website_sale.pricelist_list" />
+								</div>
+							</div>
+						</div>
+						<div class="company_language" t-if="len(languages) &gt; 1">
+							<ul class="list-inline js_language_selector ul_margin"
+								t-if="(request 
+														and request.is_frontend_multilang and len(languages) &gt; 1) or (website 
+														and (editable or translatable))">
+								<div
+									t-attf-class="#{request and request.is_frontend_multilang 
+														and len(languages) &gt; 1 and 'dropdown' or 'hidden'} btn-group">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										<t t-set="c_lang" t-value="website.get_res_lang()" />
+										<span t-esc="c_lang.name" />
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li t-foreach="languages" t-as="lg">
+											<a
+												t-att-href="url_for(request.httprequest.path + '?' + keep_query(), 
+														lang=lg[0])"
+												t-att-data-default-lang="(editable or translatable) and 'true' 
+														if website and lg[0] == website.default_lang_code else None"
+												t-att-data-lang="lg[0]" class="js_change_lang">
+												<t t-esc="lg[1].split('/').pop()" />
+											</a>
+										</li>
+									</ul>
+								</div>
+							</ul>
+						</div>
+					</div>
+
+					<div class="clarico_hs6_toggle">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target=".header_main_center">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="hs_6_search_res">
+						<div class="js_searchBox">
+							<a href="#" class="header_right_search_icon_link">
+								<i class="fa fa-search srch_icon" />
+								<i class="fa fa-times close_icon" />
+							</a>
+						</div>
+						<div class="anim-search">
+							<form action="/shop" method="get" t-att-class="search_class">
+								<div class="input-group">
+									<input type="text" name="search"
+										class="search-query form-control oe_search_box clarico_search_border"
+										placeholder="Search..." t-att-value="search" required="required" />
+									<button type="submit" class="btn-default oe_search_button">
+										<i class="fa fa-search" />
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<!-- <div class="header_main_center" style="width:12% !important;"> -->
+					<div class="header_main_center">
+						<div class="static_menus_main">
+					
+						</div>
+						<section class="header_top_menu_li search_menu">
+							<a>
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</a>
+						</section>
+						<div class="company-phone-div">
+							<ul id="logout_ul" class="sign_in_and_administrtor_link header-main-signin">
+								<li id="user_sign_in"></li>
+								<li class="dropdown" id="login_user_name" t-ignore="true"
+									t-if="website.user_id != user_id">
+									<a href="#" class="dropdown-toggle header_admin_border"
+										data-toggle="dropdown">
+										<b>
+											<span>My Account</span>
+											<span class="caret" />
+										</b>
+									</a>
+									<ul class="dropdown-menu js_usermenu account-ul" role="menu">
+										<li>
+											<p class="ul_class_admin_name">
+												<i class="fa fa-user fa_common_style_header" style="padding-right: 9px;" />
+												<a href="/my/home">
+													<span class="span_logout"
+														t-esc="(len(user_id.name)&gt;25) and (user_id.name[:23]+'...') or user_id.name" />
+												</a>
+											</p>
+										</li>
+										<li id="o_logout">
+											<a t-attf-href="/web/session/logout?redirect=/" role="menuitem"
+												class="btn">Logout
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<i class="fa fa-shopping-cart fa_common_style_header" style="padding-right: 2px;"></i>
+									<a href="/shop/cart" style="font-family: oswald-regular;color: #fff;">My Cart</a>
+								</li>
+							</ul>
+							<div id="header-social">
+								<li id="header-compare" class="mr-common compare-menu" />
+								<li id="header-wishlist" class="mr-common" />
+							</div>
+
+						</div>
+
+						<div class="header_cart_main cart_style_6 mr-common" />
+					</div>
+					<div class="search_menu_div">
+						<form action="/shop" method="get" t-att-class="search_class">
+							<div class="input-group search_menu_sub_div">
+								<span class="search_close">x</span>
+								<input type="text" name="search"
+									class="search-query form-control oe_search_box hs6_srch_input"
+									placeholder="Search..." t-att-value="search" required="required" />
+								<button type="submit" class="search_icon">
+									<i class="fa fa-search" />
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</xpath>
+	</template>
+</odoo>

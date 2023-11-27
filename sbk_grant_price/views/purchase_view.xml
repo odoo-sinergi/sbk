@@ -1,0 +1,48 @@
+<odoo>
+    <data>
+        <record id="purchase_order_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                    <field name="amount_untaxed" position="attributes">
+                        <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+			        </field>
+
+                    <field name="amount_total" position="attributes">
+                        <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+			        </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="purchase_order_form_inherit">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <!-- <field name="inherit_id" ref="purchase.purchase_order_form"/> -->
+            <field name="inherit_id" ref="multi_currency_expansion.purchase_order_form_inherited"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='taxes_id']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='amount_tax']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+                </xpath>
+                <field name="base_currency_amount_total" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>
+			    </field>
+            </field>
+        </record>
+    </data>
+</odoo>

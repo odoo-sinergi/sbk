@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+       <record id="group_see_origin_name" model="res.groups">
+        <field name="name">Can see Original Name</field>
+      </record>
+
+      <!-- <record id="base.group_erp_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_see_price'))]"/>
+      </record> -->
+
+    </data>
+</odoo>

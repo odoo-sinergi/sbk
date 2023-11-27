@@ -1,0 +1,68 @@
+<odoo>
+    <data>
+        <record id="ep_product_template_form_view" model="ir.ui.view">            
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>            
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='list_price']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>      
+                     
+                </xpath>
+                <xpath expr="//label[@for='standard_price']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>      
+                     
+                </xpath>
+                <xpath expr="//div[@name='standard_price_uom']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>  
+                     
+                </xpath>
+                <xpath expr="//div[@name='standard_price_uom']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>  
+                     
+                </xpath>     
+            </field>
+        </record> 
+         
+        <record id="ep_product_template_tree_view_cost_price" model="ir.ui.view">         
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='standard_price']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>      
+                     
+                </xpath>
+            </field>
+        </record>
+        <record id="ep_view_template_property_form" model="ir.ui.view">            
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='price']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>  
+                     
+                </xpath>
+                     
+            </field>
+        </record>
+        <record id="ep_product_supplierinfo_tree_view" model="ir.ui.view">            
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='price']" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>  
+                     
+                </xpath>
+                     
+            </field>
+        </record>
+        <record id="ep_product_template_kanban_view" model="ir.ui.view">            
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_kanban_details']/ul/li" position="attributes">
+                    <attribute name="groups">sbk_grant_price.group_see_price</attribute>                    
+                </xpath>                    
+            </field>
+        </record>
+    </data>
+</odoo>

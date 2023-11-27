@@ -1,0 +1,47 @@
+<odoo>
+	<template id="sbk_contactus_form" inherit_id="clarico_contact.clarico_contactus_form"
+              name="Contact Us">
+        <xpath expr="//form[@action='/website_form/']" position="replace">
+        	<form action="/website_form/" method="post" data-model_name="crm.lead" data-success_page="/contactus-thank-you" class="s_website_form form-horizontal container-fluid mt32" enctype="multipart/form-data" data-editable-form="false">
+        		<div class="form-group form-field o_website_form_required">
+					<label class="col-md-3 col-sm-4 control-label clabel" for="name">Subject
+					</label>
+					<div class="col-md-7 col-sm-8">
+							<select id="dptemail" class="form-control o_website_form_input cinput" name="name" required="" t-att-value="request.params.get('name', '')">
+								<option value="Ecommerce">Ecommerce</option>
+								<option value="Industri">Industri</option>
+								<option value="Import">Import Department</option>
+							</select>
+					</div>
+				</div>
+                <div class="main">
+                    <div class="row">
+                        <div class="col-md-4 form-group form-field o_website_form_required_custom">
+                            <span><input type="text" name="contact_name" size="33" t-att-value="request.params.get('contact_name', '')" required="" placeholder="Your Name"/></span>
+                        </div>
+                        <div class="col-md-4 form-group form-field o_website_form_required_custom">
+                            <span><input type="email" name="email_from" size="33" required="" t-att-value="request.params.get('email_from', '')" placeholder="Your Email" /></span>
+                        </div>
+                        <div class="col-md-4 form-group form-field o_website_form_required_custom">
+                            <span><input type="text" name="subject" size="33" t-att-value="request.params.get('subject', '')" required="" placeholder="Your Subject"/></span>
+                        </div>
+                        <div class="col-md-12 form-group form-field o_website_form_required_custom">
+                            <span>
+                            	<textarea name="message" cols="105" rows="20" aria-invalid="false" placeholder="Message">
+                            		<t t-esc="request.params.get('message', '')" />
+                            	</textarea>
+                        	</span>
+                        </div>
+                        <div class="form-group">
+							<div class="col-md-12">
+								<span
+									class="o_website_form_send shop_now_button">Send</span>
+								<span id="o_website_form_result"></span>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </form>
+        </xpath>
+    </template>
+</odoo>

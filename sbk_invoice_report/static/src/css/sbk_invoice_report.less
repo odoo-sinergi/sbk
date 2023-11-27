@@ -1,0 +1,59 @@
+.sbkinvoice {
+    table.sum_table {
+        border-top: 1px solid @gray !important;
+    }
+    .row > .col-xs-4 > table {
+        tr:last-child td {
+            // border-top: 1px solid @gray !important;
+            background-color: transparent;//overwrite
+            // color:#555551;//overwrite
+        }
+    }
+   
+    //Overwrite thằng dưới bằng thằng trên, suy ra thứ tự không quan trọng
+    .row > .col-xs-4 > table, .row > .col-xs-6 > table {
+      
+
+        tr td {
+            border: 1px dashed @gray;//thêm
+        }
+        p {
+            margin: 0px;
+            padding: 0px;
+        }
+        
+        p:last-child{
+            text-align: center;
+        }
+    }
+    
+    
+    table {
+        border: 1px solid @gray;//thêm
+        tbody {
+            tr td {
+                border: 1px solid @gray;//thêm
+                border-top: 1px solid @gray;
+            }
+        }
+        thead {
+            tr th {
+                // border-bottom: 1px solid @gray !important;
+                border-right: 1px solid @gray;//thêm
+            }
+        }
+    }
+
+    
+    table#sign-table-sbk {
+        border: None;
+        td {
+            border: None;
+        }
+        td p:last-child {
+                text-align: left;
+        }
+    }
+   
+    
+}

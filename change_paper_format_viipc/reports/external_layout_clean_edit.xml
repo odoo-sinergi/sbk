@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+
+        <!-- Inherit the less assets frondend -->
+        <!--<template id="viipc_less" name="viipc_external_layout_clean_less_inherit" inherit_id="website.assets_frontend" active="True" priority="1">
+            <xpath expr="link[last()]" position="after">
+                <link href="/change_paper_format_viipc/static/src/less/layout_clean_inherit.less" rel="stylesheet" type="text/less"/>
+            </xpath>
+        </template>-->
+        <template id="external_layout_clean_inherit" inherit_id="web.external_layout_clean">
+           
+            <!-- <xpath expr="//div[@class='o_clean_header']" position="replace">
+                <div class="o_clean_header" style="border:none">                     
+                </div>
+            </xpath>  -->
+
+	    <xpath expr="//div[@class='o_clean_header']" position='replace'>
+              <div class='o_clean_header' style="border-bottom:none;">
+                <div class="row">
+                <div class="col-6">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                </div>
+                <div class="col-5 offset-1" name="company_address" >
+                    <ul class="list-unstyled">
+                        <strong><li t-if="company.name"><span t-field="company.name"/></li></strong>
+                        <li t-if="company.vat"><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
+                        <li t-if="company.phone">Tel: <span t-field="company.phone"/></li>
+                        <li t-if="company.email"><span t-field="company.email"/></li>
+                        <li t-if="company.website"><span t-field="company.website"/></li>
+                    </ul>
+                </div>
+              </div>
+              </div>
+            </xpath>
+
+            <xpath expr="//strong//li[@t-if='company.name']" position="replace">
+                <h3>
+                    <strong>
+                        <li t-if="company.name"><span t-field="company.name"/></li>
+                    </strong>
+                </h3>
+            </xpath>
+            
+
+            <xpath expr="//img[@t-if='company.logo']" position="replace">
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 120px;"/>
+            </xpath>
+
+            <!-- Change style of body -->
+            <xpath expr="//div[@class='article o_report_layout_clean']" position="replace">
+                <div class="article o_report_layout_clean_inherit" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                  <t t-call="web.address_layout"/>
+                    <t t-raw="0" />
+                </div>
+            </xpath>
+
+            <!-- Temporarily remove footer -->
+           
+
+            <!-- remove line -->    
+            <xpath expr="//div[@class='footer o_clean_footer']" position="replace">
+               <div class="row mt16">
+               <div class="footer">
+                 <div class="col-xs-3 pull-left" style="text-align: center;">
+             <img class="img img-responsive" src="/change_paper_format_viipc/static/src/img/lazada.jpg" style="max-height: 100px;"/>
+                </div>
+              <div class="col-xs-6 pull-right" style="text-align: center;">
+             <img class="img img-responsive" src="/change_paper_format_viipc/static/src/img/shopee.jpg" style="max-height: 100px;"/>
+                 </div>
+                 </div>
+                 </div>
+            </xpath>
+             <!-- <img class="img img-responsive" src="/change_paper_format_viipc/static/src/img/lazada.jpg" style="max-height: 145px;"/> -->
+                
+              <!-- <div class="col-xs-6 pull-right" style="text-align: center;">
+             <img class="img img-responsive" src="/change_paper_format_viipc/static/src/img/shopee.jpg" style="max-height: 145px;"/>
+                 </div> -->
+            
+
+            <!-- Add more info to Header -->
+            <xpath expr="//ul[@class='list-unstyled']//li[@t-if='company.vat']" position="before">
+                <li t-if="company.company_registry"><span t-field="company.company_registry"/></li>
+                <li t-if="company.street"><span t-field="company.street"/></li>
+                <li>
+                    <t t-if="company.street2">
+                        <span t-field="company.street2"/>
+                    </t>
+                    <t t-if="company.city">
+                        <span t-field="company.city"/>
+                    </t>
+                    <t t-if="company.country_id">
+                        <span t-field="company.country_id.name"/>
+                    </t>
+                    <t t-if="company.zip">
+                        <span t-field="company.zip" />
+                    </t>
+                </li>
+            </xpath>
+
+            <xpath expr="//li[@t-if='company.email']" position="replace">
+                <li t-if="company.email">Email: <span t-field="company.email"/></li>
+            </xpath>
+            <xpath expr="//li[@t-if='company.phone']" position="replace">
+                <li t-if="company.phone">
+                    Tel: <span t-field="company.phone"/>
+                    <t t-if="company.whatsapp" style="white-space: nowrap;">
+                        - Whats App: <span t-field="company.whatsapp"/>
+                    </t>
+                </li>
+            </xpath>
+        </template>
+        
+    </data>
+</odoo>

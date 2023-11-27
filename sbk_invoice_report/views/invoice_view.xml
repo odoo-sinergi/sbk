@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+        <record id="invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="replace"/>
+                <field name="team_id" position="after">
+                    <field name="origin"/>
+                    <!-- <field name="e_commerce_invoice_no"/> -->
+                </field>
+                <xpath expr="//page[@name='other_info']" position="after">
+                    <page name="say" string="Note, Say">
+                        <group>
+                            <field name="description" string ="Note"/>
+                            <field name="say"/>
+                        </group>
+                    </page>
+                    <page name="picking" string="Picking">
+                        <field name="picking_ids"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_sale_order_inherit_search" model="ir.ui.view">
+            <field name="name">account.invoice.search.expand.filter</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <filter string="Week" context="{'group_by':'date_invoice:week'}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

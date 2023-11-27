@@ -1,0 +1,11 @@
+<odoo>
+	<data>
+		<!-- <template id="report_product_views_ecommerce" inherit_id="purchase.report_purchasequotation_document">
+        
+        </template>
+
+        <template id="report_product_po_views_ecommerce" inherit_id="purchase.report_purchaseorder_document">
+            
+        </template> -->
+	</data>
+</odoo>
