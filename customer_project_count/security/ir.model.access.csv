@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_customer_project_count_customer_project_count,customer_project_count.customer_project_count,model_customer_project_count_customer_project_count,,1,0,0,0

@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sbk_website_sbk_website,sbk_website.sbk_website,model_sbk_website_sbk_website,,1,0,0,0
