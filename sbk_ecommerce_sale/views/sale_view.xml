@@ -1,0 +1,159 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="sale_order_ecommerce_form">
+            <field name="name">sale.order.ecommerce.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="so_po_number"/>
+                    <field name="is_ecommerce_sale"/>
+                    <field name="ecommerce_invoice_number" attrs="{'invisible':[('is_ecommerce_sale','=',False)]}"/>
+                    <field name="ecommerce_cus_name" attrs="{'invisible':[('is_ecommerce_sale','=',False)]}"/>
+                    <field name="is_dropshipping"/>
+                    <field name="shipping_method"/>
+                     <field name="web_so" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_tax']" position="after">
+                    <field name="estimated_freight"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="attributes">
+                    <attribute name="force_save">True</attribute>
+                </xpath>
+            </field>
+        </record>
+        <template id="report_sbk_ecommerce_name" inherit_id="sbk_invoice_report.sorow0">
+            <xpath expr="(//table)[2]" position="inside">
+                    <t t-if="(env.context.get('proforma', False) or is_pro_forma)">
+                        <tr t-if="is_ecommerce_sale">
+                            <td>
+                                <p>Ecommerce Invoice#</p>
+                            </td>
+                            <td>
+                                <p><t t-esc="o.ecommerce_invoice_number"/></p>
+                            </td>
+                        </tr>
+                        <tr t-if="is_ecommerce_sale">
+                            <td>
+                                <p>eCommerce Customer Name</p>
+                            </td>
+                            <td>
+                                <p><t t-esc="o.ecommerce_cus_name"/></p>
+                            </td>
+                        </tr>
+                    </t>
+            </xpath>
+        </template>
+        <template id="report_sbk_ecommerce_rep_name" inherit_id="sbk_invoice_report.row0">
+            <xpath expr="(//table)[2]" position="inside">
+                <tr t-if="is_ecommerce_sale">
+                    <td>
+                        <p>Ecommerce Invoice#</p>
+                    </td>
+                    <td>
+                        <p><t t-esc="o.e_commerce_invoice_no"/></p>
+                    </td>
+                </tr>
+                <tr t-if="is_ecommerce_sale">
+                    <td>
+                        <p>eCommerce Customer Name</p>
+                    </td>
+                    <td>
+                        <p><t t-esc="o.ecommerce_cus_name"/></p>
+                    </td>
+                </tr>
+            </xpath>
+        </template>
+        <template id="report_saleorder_inherit_ecommerce" inherit_id="web.external_layout">
+            <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
+                    <div t-if="'is_dropshipping' in o.fields_get()">
+                        <div t-if="o.is_dropshipping == False">
+                            <div class="header">
+                                <div class="row">
+                                    <div class="col-xs-3 mb4">
+                                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 45px;"/>
+                                    </div>
+                                    <div class="col-xs-9 text-right" style="margin-top:22px;" t-field="company.report_header" name="moto"/>
+                                </div>
+                                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                                    <div class="col-xs-12">
+                                        <div style="border-bottom: 1px solid black;"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6" name="company_address">
+                                        <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black; display:inline-block;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div t-if="'is_dropshipping' not in o.fields_get()">
+                        <div class="header">
+                            <div class="row">
+                                <div class="col-xs-3 mb4">
+                                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 45px;"/>
+                                </div>
+                                <div class="col-xs-9 text-right" style="margin-top:22px;" t-field="company.report_header" name="moto"/>
+                            </div>
+                            <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                                <div class="col-xs-12">
+                                    <div style="border-bottom: 1px solid black;"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6" name="company_address">
+                                    <span t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black; display:inline-block;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="article o_report_layout_standard">
+                        <t t-raw="0"/>
+                    </div>
+                    <div t-if="'is_dropshipping' in o.fields_get()">
+                        <div t-if="o.is_dropshipping == False">
+                            <div class="footer">
+                                <!-- <div class="text-center" style="border-top: 1px solid black;">
+                                    <ul class="list-inline mb4">
+                                        <li t-if="company.phone">Phone: <span t-field="company.phone"/></li>
+                                        <li t-if="company.email">Email: <span t-field="company.email"/></li>
+                                        <li t-if="company.website">Web: <span t-field="company.website"/></li>
+                                        <li t-if="company.vat"><t t-esc="company.country_id.vat_label or 'TIN'"/>: <span t-field="company.vat"/></li>
+                                    </ul>
+
+                                    <div name="financial_infos">
+                                        <span t-field="company.report_footer"/>
+                                    </div>
+
+                                    <div class="text-muted">
+                                        Page: <span class="page"/> / <span class="topage"/>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div t-if="'is_dropshipping' not in o.fields_get()">
+                            <div class="footer">
+                                <!-- <div class="text-center" style="border-top: 1px solid black;">
+                                    <ul class="list-inline mb4">
+                                        <li t-if="company.phone">Phone: <span t-field="company.phone"/></li>
+                                        <li t-if="company.email">Email: <span t-field="company.email"/></li>
+                                        <li t-if="company.website">Web: <span t-field="company.website"/></li>
+                                        <li t-if="company.vat"><t t-esc="company.country_id.vat_label or 'TIN'"/>: <span t-field="company.vat"/></li>
+                                    </ul>
+
+                                    <div name="financial_infos">
+                                        <span t-field="company.report_footer"/>
+                                    </div>
+
+                                    <div class="text-muted">
+                                        Page: <span class="page"/> / <span class="topage"/>
+                                    </div>
+                                </div> -->
+                            </div>
+                    </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

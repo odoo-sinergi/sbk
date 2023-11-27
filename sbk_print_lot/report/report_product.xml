@@ -1,0 +1,90 @@
+<odoo>
+    <data>
+        <record id="paperformat_pr" model="report.paperformat">
+			<field name="name">SBK Product</field>
+			<field name="default" eval="True" />
+			<field name="format">custom</field>
+			<field name="page_height">50</field>
+			<field name="page_width">75</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">10</field>
+			<field name="margin_bottom">0</field>
+			<field name="margin_left">0</field>
+			<field name="margin_right">0</field>
+			<field name="header_line" eval="False" />
+			<field name="header_spacing">5</field>
+			<field name="dpi">90</field>
+		</record>
+		<template id="report_simple_label">
+			<div style="padding:0;" >
+				<table style="border-spacing:0;margin-bottom:0;height:122px;" class="table">
+					<thead>
+						<tr >
+							<td style="border: 2px solid black" colspan="2" >
+								<t t-if="product.default_code">
+                            [
+									<strong t-field="product.default_code"/>]
+                        
+								</t>
+								<strong t-field="product.name"/>
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="border: 2px solid black;text-align: center; vertical-align: middle;" class="col-xs-7">
+								<img t-if="product.barcode and len(product.barcode) == 13" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', product.barcode, 1200, 300)" style="width:100%;height:13%;"/>
+								<img t-elif="product.barcode and len(product.barcode) == 8" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN8', product.barcode, 1200, 300)" style="width:100%;height:13%;"/>
+								<img t-else="" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', product.barcode, 1200, 300)" style="width:100%;height:13%;"/>
+								<span t-field="product.barcode"/>
+							</td>
+							<td style="border: 2px solid black; text-align: center;" class="col-xs-5">
+								<h4>
+									<strong t-field="product.company_id.currency_id.symbol"/>
+									<strong t-field="product.list_price"/>
+								</h4>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</template>
+		
+        
+        <template id="product.report_productlabel">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="product">
+                        <t t-call="sbk_print_lot.report_simple_label">
+                            <t t-set="product" t-value="product"/>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+        
+        <template id="product.report_producttemplatelabel">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="template">
+                        <t t-foreach="template.product_variant_ids" t-as="product">
+                            <t t-call="sbk_print_lot.report_simple_label">
+                                <t t-set="product" t-value="product"/>
+                            </t>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </template>
+
+
+
+		<record id="product.report_product_label" model="ir.actions.report">
+			<field name="paperformat_id" ref="paperformat_pr"/>
+		</record>
+		<record id="product.report_product_template_label" model="ir.actions.report">
+			<field name="paperformat_id" ref="paperformat_pr"/>
+		</record>
+    </data>
+</odoo>

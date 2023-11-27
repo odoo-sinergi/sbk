@@ -1,0 +1,172 @@
+<odoo>
+    <template id="checkout" inherit_id="website_sale.checkout">
+        <xpath expr="//div[@id='wrap']" position="replace">
+            <div id="wrap">
+                <div class="container oe_website_sale">
+                    <t t-set="same_shipping" t-value="bool(order.partner_shipping_id==order.partner_id or only_services)" />
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2 oe_cart">
+                            <div class='row'>
+                                <t t-call="website_sale.wizard_checkout">
+                                    <t t-set="step" t-value="20" />
+                                </t>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2 class="page-header mt8">Billing Address</h2>
+                                </div>
+                                <div class="col-md-6 one_kanban">
+                                    <t t-call="website_sale.address_kanban">
+                                        <t t-set='contact' t-value="order.partner_id"/>
+                                        <t t-set='selected' t-value="1"/>
+                                        <t t-set='readonly' t-value="1"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <t t-if="not only_services" groups="sale.group_delivery_invoice_address">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2 class="page-header mt16 mb4">Shipping Address
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div class="row all_shipping">
+                                    <div class="col-md-12">
+                                        <div class="row mt8">
+                                            <div class="col-sm-12 col-md-12 one_kanban">
+                                                <form action="/shop/address" method="post" class=''>
+                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                                                    <a class='a-submit btn btn-default mb16 btn-block'>
+                                                        <i class="fa fa-plus-square" aria-hidden="true"></i> Add an address
+                                                    </a>
+                                                </form>
+                                            </div>
+                                            <t t-foreach="shippings" t-as="ship">
+                                                <div class="col-sm-12 col-md-6 one_kanban">
+                                                    <t t-call="website_sale.address_kanban">
+                                                        <t t-set="actual_partner" t-value="order.partner_id" />
+                                                        <t t-set='contact' t-value="ship"/>
+                                                        <t t-set='selected' t-value="order.partner_shipping_id==ship"/>
+                                                        <t t-set='readonly' t-value="bool(len(shippings)==1)"/>
+                                                        <t t-set='edit_billing' t-value="bool(ship==order.partner_id)"/>
+                                                    </t>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class="clearfix" />
+                            <div>
+                               <!-- <a href="/shop/cart" class="btn btn-default mb32">
+                                    <span class="fa fa-long-arrow-left"/> Return to Cart</a>-->
+                                <a t-if="1==2" class="btn btn-primary pull-right mb32 " href="/shop/confirm_order">Confirm<span class="fa fa-long-arrow-right"/></a>
+                              
+                                    <form action="/website_form/" method="post" class="s_website_form form-horizontal container-fluid mt32" enctype="multipart/form-data" data-model_name="mail.mail" data-success_page="/shop/confirm_order">
+                                    <!--<form action="/website_form/" method="post" class="s_website_form form-horizontal container-fluid" data-model_name="sale.order" data-success_page="/shop/confirm_order">-->
+                                      <a href="/shop/cart" class="btn btn-default mb32">
+                                    <span class="fa fa-long-arrow-left"/> Return to Cart</a>
+                                    
+                                    <span class="btn btn-primary pull-right mb32 o_website_form_send o_default_snippet_text">Submit Order</span>
+                                      <!--<input class="form-field" type="hidden" name="state" id="state" value="sale"/>-->
+                                     <input class="form-field" type="hidden" name="email_to" id="email_to" t-att-value="order.user_id.login"/>
+                                     <input class="form-field" type="hidden" name="subject" id="subject" value="Website Order Submit"/>
+                                     <input class="form-field" type="hidden" name="body_html" id="body_html" 
+                                       t-att-value="'someone submit this sale order no ' + order.name + ' plz go and edit the freight amount'"/>
+                                    </form>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="clarico_rating_star" inherit_id="clarico_rating.clarico_rating_star">
+	    <xpath expr="//div[hasclass('o_rating_star_card')]" position="replace">
+		</xpath>
+    </template>    
+
+     <template id="clarico_product_product" inherit_id="clarico_product.clarico_product_product">
+        <xpath expr="//div[hasclass('col-sm-7')]" position="replace">
+            <div class="col-sm-7 res_product_img">
+            <t t-set="image_ids" t-value="product.product_image_ids"/>
+            <!--<div id="o-carousel-product" class="carousel slide"  data-ride="carousel" data-interval="0" style="height:250px !important;">-->
+            <div id="o-carousel-product" class="carousel slide" data-ride="carousel" data-interval="0" style="height:350px !important;">
+                <div class="carousel-outer" >
+                <div class="carousel-inner inner-slider" >
+                
+                    <div class="item active image_zoom res_prod_img" itemprop="image" t-field="product.product_variant_ids[0].image" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;product_detail_img js_variant_img&quot;, &quot;alt-field&quot;: &quot;name&quot;, &quot;zoom&quot;: &quot;image&quot;}"/>
+                    <!--<div class="item active image_zoom res_prod_img" itemprop="image" t-field="product.product_variant_ids[0].image" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;res_prod_img js_variant_img&quot;, &quot;alt-field&quot;: &quot;name&quot;, &quot;zoom&quot;: &quot;image&quot;}"/>-->
+                    <div t-if="variant_img" class="item image_zoom" itemprop="image" t-field="product.image" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;res_prod_img product_detail_img&quot;, &quot;alt-field&quot;: &quot;name&quot;, &quot;zoom&quot;: &quot;image&quot;}"/>
+                    <!--<div t-if="variant_img" class="item res_prod_img image_zoom" itemprop="image" t-field="product.image" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;alt-field&quot;: &quot;name&quot;, &quot;zoom&quot;: &quot;image&quot;}"/>-->
+                    <t t-if="len(image_ids)" t-foreach="image_ids" t-as="pimg">
+                    <div class="item image_zoom res_prod_img" t-field="pimg.image" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;product_detail_img&quot;, &quot;alt-field&quot;: &quot;name&quot;, &quot;zoom&quot;: &quot;image&quot; }"/>
+                    <!--<div class="item res_prod_img image_zoom" t-field="pimg.image" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;alt-field&quot;: &quot;name&quot;, &quot;zoom&quot;: &quot;image&quot; }"/>-->
+                    </t>
+                
+                </div>
+                <t t-if="len(image_ids) or variant_img">
+                    <a class="carousel-control left" href="#o-carousel-product" role="button" data-slide="prev">
+                    <span class="fa fa-chevron-left res_prev_class" aria-hidden="true"/>
+                    <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control right" href="#o-carousel-product" role="button" data-slide="next">
+                    <span class="fa fa-chevron-right res_next_class" aria-hidden="true"/>
+                    <span class="sr-only">Next</span>
+                    </a>
+                </t>
+                </div>
+                <ol class="carousel-indicators mCustomScrollbar" id="indicators" t-if="len(image_ids) or variant_img" data-mcs-theme="dark">
+                <li data-target="#o-carousel-product" data-slide-to="0" class="active">
+                    <img class="img img-responsive js_variant_img_small" t-attf-src="/website/image/product.product/{{product.product_variant_ids[0].id}}/image/90x90" t-att-alt="product.name"/>
+                </li>
+                <li t-if="variant_img" data-target="#o-carousel-product" data-slide-to="1" class="">
+                    <img class="img img-responsive" t-attf-src="/website/image/product.template/{{product.id}}/image/90x90" t-att-alt="product.name"/>
+                </li>
+                <t t-if="len(image_ids)" t-foreach="image_ids" t-as="pimg">
+                    <li data-target="#o-carousel-product" t-att-data-slide-to="pimg_index + (variant_img and 2 or 1)">
+                    <img class="img img-responsive" t-attf-src="/website/image/product.image/{{pimg.id}}/image/90x90" t-att-alt="pimg.name"/>
+                    </li>
+                </t>
+                </ol>
+                <div t-if="product.p_video_url">
+                <a class="pvideo_link" href="#">
+                    <i class="fa fa-video-camera" aria-hidden="true"/>
+                </a>
+                </div>
+                <!-- <div><a class="p_zoom_link">Click image to zoom product</a></div> -->
+            </div>
+            <div class="zoomed_image_on_screen">
+                <div class="div_cross_zoomed_image">
+                <p class="p_class_cross_image common-close-btn">
+                    <span>X</span>
+                </p>
+                </div>
+                <div class="div_parent_zoom_class">
+                <div class="zooming_image_screen_o">
+                    <img src="" class="zooming_image_screen"/>
+                </div>
+                <!-- slider on zoom -->
+                <div class="clarico_slide">
+                    <ol class="carousel-indicators mCustomScrollbar" t-if="len(image_ids) or variant_img" data-mcs-theme="dark">
+                    <li class="active ref_imgs">
+                        <img class="img img-responsive" t-attf-src="/website/image/product.product/{{product.product_variant_ids[0].id}}/image/2000x2000" t-att-alt="product.name"/>
+                    </li>
+                    <li t-if="variant_img" class="ref_imgs">
+                        <img class="img img-responsive" t-attf-src="/website/image/product.template/{{product.id}}/image/2000x2000" t-att-alt="product.name"/>
+                    </li>
+                    <t t-if="len(image_ids)" t-foreach="image_ids" t-as="pimg">
+                        <li class="ref_imgs">
+                        <img class="img img-responsive " t-attf-src="/website/image/product.image/{{pimg.id}}/image/2000x2000" t-att-alt="pimg.name"/>
+                        </li>
+                    </t>
+                    </ol>
+                </div>
+                </div>
+            </div>
+            </div>
+        </xpath>
+     </template>
+</odoo>

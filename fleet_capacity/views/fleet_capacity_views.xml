@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <!-- fleet_capacity tree view -->
+        <record id="fleet_vehicle_capacity_view_tree" model="ir.ui.view">
+            <field name="name">fleet_capacity.view.tree</field>
+            <field name="model">fleet_capacity.fleet_capacity</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="vehicle"/>
+                    <field name="carton_type"/>
+                    <field name="capacity"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- model.name action window -->
+        <record id="fleet_vehicle_capacity" model="ir.actions.act_window">
+            <field name="name">Vehicle Capacity</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fleet_capacity.fleet_capacity</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to see and calculate vehicle capacity
+                </p>
+            </field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="fleet_vehicle_capacity_menu" parent="fleet.fleet_vehicles" action="fleet_vehicle_capacity" sequence="10"/>
+    </data>
+</odoo>

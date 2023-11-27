@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- carton_type form view -->
+        <record id="model_name_view_form" model="ir.ui.view">
+            <field name="name">fleet_capacity.carton_type.view.form</field>
+            <field name="model">fleet_capacity.carton_type</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <!-- Add your fields here -->
+                            <field name="name"/>
+                            <label for="height"/>
+                            <div class="o_row" name="height">
+                                <field name="height"/><span>m</span>
+                            </div>
+                            <label for="width"/>
+                            <div class="o_row" name="width">
+                                <field name="width"/><span>m</span>
+                            </div>
+                            <label for="depth"/>
+                            <div class="o_row" name="depth">
+                                <field name="depth"/><span>m</span>
+                            </div>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- fleet_capacity.carton_type tree view -->
+        <record id="carton_type_view_tree" model="ir.ui.view">
+            <field name="name">fleet_capacity.carton_type.view.tree</field>
+            <field name="model">fleet_capacity.carton_type</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="height"/>
+                    <field name="width"/>
+                    <field name="depth"/>
+                    
+                </tree>
+            </field>
+        </record>
+
+        <!-- fleet_capacity.carton_type action window -->
+        <record id="carton_type_action" model="ir.actions.act_window">
+            <field name="name">Carton Types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fleet_capacity.carton_type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create carton type
+                </p>
+            </field>
+        </record>
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="carton_type_menu" name="Carton Types" parent="fleet.fleet_configuration" action="carton_type_action" sequence="5"/>
+    </data>
+</odoo>

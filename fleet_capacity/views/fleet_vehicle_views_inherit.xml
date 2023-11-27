@@ -1,0 +1,27 @@
+<odoo>
+  <data>
+    <!-- fleet_vehicle inherit form view -->
+    <record id="view_id" model="ir.ui.view">
+      <field name="name">fleet_vehicle.inherit.view.form</field>
+      <field name="model">fleet.vehicle</field>
+      <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+      <field name="arch" type="xml">
+        <!-- Add your xpath here -->
+        <xpath expr="//field[@name='color']" position="after">
+          <label for="container_height"/>
+          <div class="o_row" name="container_height">
+              <field name="container_height"/><span>m</span>
+          </div>
+          <label for="container_width"/>
+          <div class="o_row" name="container_width">
+              <field name="container_width"/><span>m</span>
+          </div>
+          <label for="container_depth"/>
+          <div class="o_row" name="container_depth">
+              <field name="container_depth"/><span>m</span>
+          </div>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

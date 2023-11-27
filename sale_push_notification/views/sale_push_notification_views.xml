@@ -1,0 +1,98 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="sale_push_notification.list">
+      <field name="name">sale_push_notification list</field>
+      <field name="model">sale_push_notification.sale_push_notification</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="sale_push_notification.action_window">
+      <field name="name">sale_push_notification window</field>
+      <field name="res_model">sale_push_notification.sale_push_notification</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="sale_push_notification.action_server">
+      <field name="name">sale_push_notification server</field>
+      <field name="model_id" ref="model_sale_push_notification_sale_push_notification"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="sale_push_notification" id="sale_push_notification.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="sale_push_notification.menu_1" parent="sale_push_notification.menu_root"/>
+    <menuitem name="Menu 2" id="sale_push_notification.menu_2" parent="sale_push_notification.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="sale_push_notification.menu_1_list" parent="sale_push_notification.menu_1"
+              action="sale_push_notification.action_window"/>
+    <menuitem name="Server to list" id="sale_push_notification" parent="sale_push_notification.menu_2"
+              action="sale_push_notification.action_server"/>
+    -->
+
+
+    <!-- sale.push_device tree view -->
+    <record id="sale_push_device_view_tree" model="ir.ui.view">
+      <field name="name">sale.push_device.view.tree</field>
+      <field name="model">sale.push_device</field>
+      <field name="arch" type="xml">
+        <tree>
+          <!-- Add your fields here -->
+          <field name="name"/>
+          <field name="partner_id"/>
+          <field name="mobile_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="sale_push_device_config_action" model="ir.actions.act_window">
+      <field name="name">Sales Push Devices</field>
+      <field name="res_model">sale.push_device</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{}</field>
+      <field name="view_id" ref="sale_push_device_view_tree"/>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+              Click here to add devices that receive push notification.
+          </p><p>
+              Add devices.
+          </p>
+      </field>
+    </record>
+
+    <menuitem id="sales_push_device_config"
+    name="Sales Push Devices"
+    parent="sale.menu_sale_config"
+    action="sale_push_device_config_action"
+    sequence="3"
+    groups="sales_team.group_sale_manager"/>
+  </data>
+</odoo>

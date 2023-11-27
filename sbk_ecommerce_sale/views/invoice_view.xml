@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+        <menuitem id="account.menu_finance_payables" name="Purchases" parent="account.menu_finance" sequence="3" groups="account.group_account_user,account.group_account_manager" />
+
+        <record id="invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='team_id']" position="after">
+                    <field name="shipping_method"/>
+                    <field name="is_ecommerce_sale"/>
+                    <field name="e_commerce_invoice_no" attrs="{'invisible':[('is_ecommerce_sale','=',False)]}"/>
+                    <field name="ecommerce_cus_name" attrs="{'invisible':[('is_ecommerce_sale','=',False)]}"/>
+                    <field name="is_dropshipping"/>
+                    <field name="so_po_number"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_tax']" position="after">
+                    <field name="freight"/>
+                </xpath>
+
+                <xpath expr="//field[@name='number']" position="after">
+                    <span attrs="{'invisible':[('amount_tax','>','0')]}">A</span>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_account_inherit_search" model="ir.ui.view">
+            <field name="name">account.view.account.invoice.filter</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <filter string="Week" name="week" context="{'group_by':'date_invoice:week'}"/>
+                    <!-- <field name= "context">{"search_default_week":1}</field> -->
+                </xpath>
+         </field>
+        </record>
+                <!-- <record id="stock_picking_replace_status_bar" model="ir.ui.view">
+            <field name="name">stock.picking.status.bar</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,partially_available,assigned,pickedup,done"/>
+                </xpath>
+                <xpath expr="//button[@name='action_assign']" position="after">
+                    <field name="show_pickedup" invisible="1"/>
+                    <button name="button_pickedup" attrs="{'invisible': [('show_pickedup', '=', False)]}" string="Pickedup" groups="stock.group_stock_user" type="object" class="oe_highlight"/>
+                </xpath>
+         </field>
+        </record> -->
+    </data>
+</odoo>

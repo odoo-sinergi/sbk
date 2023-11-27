@@ -1,0 +1,7 @@
+<odoo>
+    <template id="assets_backend" name="account assets" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/sbk_stock/static/src/css/sbk_stock.less"/>
+        </xpath>
+    </template>
+</odoo>

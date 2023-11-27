@@ -1,0 +1,80 @@
+<odoo>
+    <data>
+        
+        <record model="ir.ui.view" id="partner_view_buttons">
+            <field name="name">partner.view.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                
+                <button name="toggle_active" position="before">
+                    <button type="object"
+                        class="oe_stat_button"
+                        id="partner_ledger_button"
+                        icon="fa-pencil-square-o"
+                        name="open_crm_ledger"
+                        context="{'default_partner_id': active_id}">
+                        CRM report
+                        <!-- <field string="Sale Report" name="sale_order_line_count" widget="statinfo"/> -->
+                    </button>
+                </button>
+
+
+
+                <button name="toggle_active" position="before">
+                    <button type="object"
+                        class="oe_stat_button"
+                        id="partner_ledger_button"
+                        icon="fa-pencil-square-o"
+                        name="open_sale_ledger"
+                        context="{'default_partner_id': active_id}">
+                        <field string="Sale Report" name="sale_order_line_count" widget="statinfo"/>
+                    </button>
+                </button>
+
+                <button name="toggle_active" position="before">
+                    <button type="object"
+                        class="oe_stat_button"
+                        id="partner_ledger_button"
+                        icon="fa-pencil-square-o"
+                        name="open_sample_ledger"
+                        context="{'default_partner_id': active_id}">
+                        <field string="Sample Report" name="sample_sale_order_line_count" widget="statinfo"/>
+                    </button>
+                </button>
+
+
+            </field>
+        </record>
+
+     <!-- <button name="toggle_active" position="before">
+                    <button class="oe_stat_button" name="%(sbk_sol_report.action_sale_order_line)d" type="action"
+                            icon="fa-pencil-square-o" help="Vendor Bills"
+                        context="{'default_order_partner_id': active_id}">
+                        <field string="Product Sale" name="sale_order_line_count" widget="statinfo"/>
+                    </button>
+                </button> -->
+        <!-- <record id="action_sale_order_line" model="ir.actions.act_window">
+            <field name="name">Product Sale Order</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_order_partner_id': active_id}</field>
+        </record>
+        <record id="view_sales_order_line_filter" model="ir.ui.view">
+            <field name="name">sale.order.line.select</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_sales_order_line_filter" />
+            <field name="arch" type="xml">
+                    <field name="order_partner_id" position="replace">
+                        <field name="order_partner_id" />
+                    </field>
+            </field>
+        </record> -->
+        
+    
+
+
+    </data>
+</odoo>

@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- Add you code here -->
+        <template id="report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+            <xpath expr="//t[@t-set='address']" position="replace">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <p>Bill To:</p>
+                        <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                        <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/></div>
+                    </div>
+                    <div class="col-5 offset-4">
+                        <p>Ship To:</p>
+                        <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                        <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/></div>
+                    </div>
+                </div>
+            </xpath>
+
+            <xpath expr="//div[@class='row mt32 mb32'][1]" position="replace">
+                    <div class="row mt32 mb32">
+                        <div class="col-xs-2 " t-if="o.user_id">
+                            <p>Salesperson:</p>
+                            <p t-field="o.user_id"/>
+                        </div>
+                        <div class="col-xs-2 offset-3" t-if="o.date_invoice">
+                            <p>Invoice Date:</p>
+                            <p t-field="o.date_invoice"/>
+                        </div>
+                        <div class="col-xs-2 offset-2" t-if="o.date_due and o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
+                            <p>Due Date:</p>
+                            <p t-field="o.date_due"/>
+                        </div>
+                        <div class="col-xs-2 offset-2" t-if="o.origin">
+                            <p>Source:</p>
+                            <p t-field="o.origin"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.payment_term_id">
+                            <p>Terms:</p>
+                            <p t-field="o.payment_term_id"/>
+                        </div>
+                        <!-- <div name="reference" class="col-xs-2" t-if="o.reference">
+                            <strong>Reference:</strong>
+                            <p t-field="o.reference"/>
+                        </div> -->
+                    </div>
+            </xpath>
+
+            <xpath expr="//table[@class='table table-sm o_main_table' and @name='invoice_line_table']" position="replace">
+                    <!--<table class="table table-bordered " name="invoice_line_table">-->
+                    <table width="100%" style="border: 1px solid black;" name="invoice_line_table">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid black;" class="text-center">QTY</th>
+                                <th style="border: 1px solid black;" class="text-center">Description</th>
+                                <!-- <th class="hidden">Source Document</th> -->
+                                <th style="border: 1px solid black;" class="text-center">Price</th>
+                                <!-- <th t-if="display_discount" class="text-center">Disc.(%)</th> -->
+                                <!-- <th class="text-right">Taxes</th> -->
+                                <th style="border: 1px solid black;" class="text-center">Amount</th>
+                            </tr>
+                          </thead>
+                        <tbody class="invoice_tbody">
+                            <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                <td style="border: 1px solid black;" class="text-center">
+                                    <span t-field="l.quantity"/>
+                                    <span t-field="l.uom_id" groups="product.group_uom"/>
+                                </td>
+                                <td style="border: 1px solid black;"><span t-field="l.name"/></td>
+                               <!--  <td class="hidden"><span t-field="l.origin"/></td> -->
+                                <td style="border: 1px solid black;" class="text-right">
+                                    <span t-field="l.price_unit"/>
+                                </td>
+                                <td style="border: 1px solid black;" t-if="display_discount" class="text-right">
+                                    <span t-field="l.discount"/>
+                                </td>
+                                <!-- <td class="text-right">
+                                    <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+                                </td> -->
+                                <td style="border: 1px solid black;" class="text-right" id="subtotal">
+                                    <span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <!-- <tr t-foreach="range(max(5-len(o.invoice_line_ids),0))" t-as="l">
+                                <td t-translation="off">&amp;nbsp;</td>
+                                <td class="hidden"></td>
+                                <td t-if="display_discount"></td>
+                                
+                            </tr> -->
+                        </tbody>
+                    </table>
+            </xpath>
+
+            <!-- Remove current h2 -->
+            <xpath expr="//h2" position="replace">
+            </xpath>
+
+             <!-- Remove current p -->
+            <xpath expr="//p[@t-if='o.reference']" position="replace">
+            </xpath>
+
+            <!-- Replace h2 -->
+            <xpath expr="//div[@class='row'][1]" position="before">
+                <br/>
+		<div class="oe_structure"/>
+		<h2 class="text-center" style="margin-left: -90px;">
+                    <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')" style="border: 1px solid black;"><strong>Tax Invoice</strong></span>
+                    <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
+                    <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                    <span t-if="o.type == 'out_refund'">Credit Note</span>
+                    <span t-if="o.type == 'in_refund'">Vendor Credit Note</span>
+                    <span t-if="o.type == 'in_invoice'">Vendor Bill</span>
+                    <!-- <span t-field="o.number"/> -->
+                </h2>
+            </xpath>
+
+            <xpath expr="//div[@class='row' and @id='total']" position="replace">
+              <br/>
+            <div id="total" class="row" name="total">
+                            <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                                <table class="table table-borderless table-sm">
+                                    <tr style="margin-top:-40px; " class="col-sm-4">
+                                        <td><strong>SALES AMT</strong></td>
+                                        <td class="text-right " style="border: 1px solid black;">
+                                            <span t-field="o.amount_untaxed"/>
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="o.amount_by_group" t-as="amount_by_group">
+                                        <tr style="">
+                                            <t t-if="len(o.tax_line_ids) == 1 and o.amount_untaxed == amount_by_group[2]">
+                                                <td><strong><span t-esc="amount_by_group[0]"/></strong></td>
+                                                <td style="border: 1px solid black;" class="text-right o_price_total">
+                                                    <span t-esc="amount_by_group[3]"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td>
+                                                    <strong>
+                                                      <span t-esc="amount_by_group[0]"/>
+                                                      <span>&amp;nbsp;<span>on</span>
+                                                          <t t-esc="amount_by_group[4]"/>
+                                                      </span>
+                                                    </strong>
+                                                </td>
+                                                <td style="border: 1px solid black;" class="text-right o_price_total">
+                                                    <span t-esc="amount_by_group[3]"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                    <tr class="col-sm-4">
+                                        <td><strong>GST</strong></td>
+                                        <td class="text-right" style="border: 1px solid black;">
+                                            <span t-field="o.amount_tax"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="col-sm-4">
+                                        <td><strong>TOTAL AMT</strong></td>
+                                        <td class="text-right" style="border: 1px solid black;">
+                                            <span t-field="o.amount_total"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="col-sm-5">
+                                        <td><strong>BALANCE DUE</strong></td>
+                                        <td class="text-right" style="border: 4px solid black;">
+                                            <span t-field="o.amount_total"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </xpath>
+
+            <!-- Add more note <div class="col-xs-4 pull-right"> -->
+             <xpath expr="//div[@name='total']" position="after">
+                <div class="col-xs-8 pull-left" style="margin-top: -130px;">
+                    <p>
+                        E. &amp; O.E.<br/>
+                        NOTE:<br/>
+                        1) Above Goods received in good order &amp; condition .<br/>
+                        2) Goods sold are not returnable<br/>
+                        3) No exchange after 7 Days.<br/>
+                        4) All Cheque should be crossed and make payable to "VIIPCTRADE PTE LTD"<br/>
+                    </p>
+                </div>
+            </xpath> 
+            <!-- Add signature <div class="row" id="total"> -->
+            <xpath expr="//div[@class='col-xs-8 pull-left']" position="after">
+                <div class="row">
+                    <div class="col-xs-6" style="margin-top: 80px;">
+                         <hr style="border-top: 1px solid black;"/>
+                        <h5><strong>Authorised Signature</strong></h5> 
+                    </div>
+                    <div class="col-6 offset-4" style="margin-top: 80px;">
+                        <hr style="border-top: 1px solid black;"/>
+                        <h5><strong>Customer's Signature And Company Stamp</strong></h5>
+                        <h5><strong>Goods Received in Good Order &amp; Conditions</strong></h5> 
+                    </div>
+                </div>
+            </xpath> 
+        </template>
+        
+    </data>
+</odoo>

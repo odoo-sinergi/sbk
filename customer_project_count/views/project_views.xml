@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="project_project_action_from_partner" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="res_model">project.project</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+        </record>
+</odoo>
