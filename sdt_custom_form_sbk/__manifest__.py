@@ -26,6 +26,7 @@
     # always loaded
     'data': [
         'report/purchase_order.xml',
+        'report/report_invoice.xml',
     ],
     # only loaded in demonstration mode
 }

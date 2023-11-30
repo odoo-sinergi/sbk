@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+
+        <template id="sdt_report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@id='qrcode']" position="after">
+                <div>
+                    <p>
+                        <b>TOP:</b>
+                        <br>Dibayarkan ke Rekening:</br>
+                        <br>BCA (KCP Pacenongan)</br>
+                        <br>PT Sumber Berlian Kimia</br>
+                        <br>5890203835</br>
+                    </p>
+                </div>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
