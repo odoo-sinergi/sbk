@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_contact_manager" model="res.groups">
+        <field name="name">Contact Manager</field>
+        <field name="category_id" ref="base.module_category_usability"/>
+    </record>
+    
+    <record id="action_contact_customers" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="context">{'default_is_company': True}</field>
+        <field name="domain">['|',('category_id.name','=','Customer'),('category_id','=',false)]</field>
+    </record>
+
+    <menuitem id="res_partner_menu_contact_customers"
+        name="Customers"
+        action="action_contact_customers"
+        parent="contacts.menu_contacts"
+        sequence="2"/>
+
+    <menuitem id="contacts.res_partner_menu_contacts"
+        name="Contacts"
+        action="contacts.action_contacts"
+        parent="contacts.menu_contacts"
+        sequence="3"
+        groups="sdt_customization.group_contact_manager"/>
+    
+    <menuitem id="contacts.res_partner_menu_config"
+        name="Configuration"
+        parent="contacts.menu_contacts"
+        groups="base.group_system"
+        sequence="4"/>
+
+    <menuitem id="sale.res_partner_menu"
+                action="account.res_partner_action_customer"
+                groups="sdt_customization.group_contact_manager"
+                sequence="40"/>
+</odoo>
