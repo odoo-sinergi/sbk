@@ -33,8 +33,8 @@
         groups="base.group_system"
         sequence="4"/>
 
-    <menuitem id="sale.res_partner_menu"
-                action="account.res_partner_action_customer"
-                groups="sdt_customization.group_contact_manager"
-                sequence="40"/>
+    <record model="ir.ui.menu" id="sale.res_partner_menu">
+        <field name="groups_id" eval="[(6,0,[ref('group_contact_manager')])]"/>
+    </record>
+
 </odoo>
