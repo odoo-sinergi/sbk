@@ -11,9 +11,11 @@
     'website': 'http://sinergidata.co.id',
     'data': [
         # 'views/account_move.xml',
+        'views/contact_views.xml',
+        'views/purchase_order.xml',
         'views/sale_order.xml',
     ],
-    'depends': ['mail','sale','account','purchase'],
+    'depends': ['mail','sale','account','purchase','contacts'],
     'installable': True,
     'auto_install': False,
     'application': False,
