@@ -13,20 +13,20 @@ class StockMove(models.Model):
 		force_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 		if self.env.user.has_group('stock_force_date_app.group_stock_force_date'):
 			for move in self:
+				if move.date:
+					force_date = move.date
 				if move.picking_id:
 					if move.picking_id.force_date:
 						force_date = move.picking_id.force_date
 					else:
 						force_date = move.picking_id.scheduled_date
-				elif move.scrapped==True:
+				if move.scrapped==True:
 					scrap_id = self.env['stock.scrap'].search([('name', '=', move.reference)])
 					if scrap_id:
 						if scrap_id.force_date:
 							force_date = scrap_id.force_date
 						else:
 							force_date = scrap_id.date_done
-				elif move.date != force_date:
-					force_date = move.date
 				# if move.raw_material_production_id:
 				# 	force_date = move.raw_material_production_id.mrp_date
 				# if move.production_id:
@@ -44,20 +44,35 @@ class StockMove(models.Model):
 				user_date = local_date.replace(tzinfo=None)
 
 				for move in res:
-					move.write({'date':force_date})
+					move.write({'date':user_date})
 					if move.move_line_ids:
 						for move_line in move.move_line_ids:
-							move_line.write({'date':force_date})
+							move_line.write({'date':user_date})
 					curr=move.purchase_line_id.currency_id.id
 					company_curr=move.company_id.currency_id.id
 					if move.account_move_ids:
 						for account_move in move.account_move_ids:
-							account_move.write({'date':user_date})
+							name = account_move.name.split('/') if account_move.name else False
+							if name and name[0] == 'STJ' and name[1] != str(user_date.year):
+								query = """update account_move set name = %s , date = %s where id = %s"""
+								seq = self.env['ir.sequence'].search([('name', '=', 'STJ Sequence')])
+								old_sequence = self.env['ir.sequence.date_range'].search([('sequence_id', '=', seq.id)]).filtered(lambda x: str(x.date_from.year) == name[1])
+								new_sequence = seq.next_by_id(user_date)
+								self.env.cr.execute(query, (new_sequence, str(user_date), account_move.id))
+								old_sequence.number_next_actual = old_sequence.number_next_actual - 1
+
+								for line in account_move.line_ids:
+									line.write({'move_name': new_sequence, 'date': user_date})
+							else:
+								account_move.write({'date': user_date})
+								for line in account_move.line_ids:
+									line.write({'date': user_date})
+							# account_move.write({'date':user_date})
 							# if move.inventory_id:
 							# 	account_move.write({'ref':move.inventory_id.name})
 							if curr!=False:
 								if curr!=company_curr:
-									cur_rate = self._get_new_rates(self.company_id, force_date, curr)
+									cur_rate = self._get_new_rates(self.company_id, user_date, curr)
 									for aml in account_move.line_ids:
 										debit=aml.debit
 										credit=aml.credit
