@@ -17,15 +17,15 @@ class AccountMove(models.Model):
     @api.onchange('move_type')
     def _onchange_movetype(self):
         if self.move_type=='in_invoice':
-            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Vendor')]).ids
+            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Supplier')]).ids
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain} 
         elif self.move_type=='in_refund':
-            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Vendor')]).ids
+            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Supplier')]).ids
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain}
         elif self.move_type=='in_receipt':
-            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Vendor')]).ids
+            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Supplier')]).ids
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain}
         elif self.move_type=='out_invoice':

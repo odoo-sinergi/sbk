@@ -17,7 +17,7 @@ class PurchaseOrder(models.Model):
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
         if self.invoice_status=='no':
-            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Vendor')]).ids
+            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Supplier')]).ids
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain} 
 
