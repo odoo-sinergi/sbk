@@ -21,7 +21,7 @@ class AccountPayment(models.Model):
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain} 
         elif self.partner_type=='supplier':
-            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Vendor')]).ids
+            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Supplier')]).ids
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain} 
 
