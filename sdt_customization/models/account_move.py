@@ -25,7 +25,7 @@ class AccountMove(models.Model):
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain}
         elif self.move_type=='in_receipt':
-            partner_obj = self.env['res.partner'].search([('category_id.name', '=', 'Supplier')]).ids
+            partner_obj = self.env['res.partner'].search([('category_id.name', '!=', 'Supplier')]).ids
             domain = {'partner_id': [('id', 'in', partner_obj)]}
             return {'domain': domain}
         elif self.move_type=='out_invoice':
