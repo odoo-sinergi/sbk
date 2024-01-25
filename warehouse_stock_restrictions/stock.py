@@ -48,14 +48,26 @@ class stock_move(models.Model):
 class allow_warehouse(models.Model):
     _inherit = 'sale.order'
 
+    
+    @api.model
+    def _sdt_default_warehouse_id(self):
+        warehouse = False
+        for wh in self:
+            if wh.warehouse_id:
+                warehouse = wh.warehouse_id
+            else:
+                warehouse = self.env.user._get_default_warehouse_id()
+        return warehouse
+
     warehouse_loc_id = fields.Many2one(
-        'stock.warehouse', string='Warehouse',
+        'stock.warehouse', string='Warehouse Location',
         required=True, readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
-        check_company=True)
+        check_company=True, default=_sdt_default_warehouse_id)
 
     @api.onchange('partner_id')
     def set_domain_for_warehouse(self):
-
+        if self.warehouse_loc_id.id==False and self.warehouse_id.id==True:
+            self.warehouse_loc_id = self.warehouse_id
         class_obj = self.env['res.users']
         loc_ids=[]
         for data in class_obj.env.user.default_picking_type_ids:
@@ -64,6 +76,18 @@ class allow_warehouse(models.Model):
         res = {}
         res['domain'] = {'warehouse_loc_id': [('id', 'in', loc_ids)]}
         return res
+
+    @api.onchange('warehouse_id')
+    def sdt_onchange_warehouse(self):
+        if self.warehouse_id:
+            self.warehouse_loc_id = self.warehouse_id
+
+
+    @api.model
+    def create(self, vals):
+        vals['warehouse_loc_id'] = vals['warehouse_id'] or self.env.user._get_default_warehouse_id()
+        result = super().create(vals)
+        return result
 
 
 
