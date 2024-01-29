@@ -8,6 +8,12 @@
             <field name="ref" position="after">
                 <field name="no_sj_supplier" attrs="{'invisible':[('move_type','!=','in_invoice')]}"/>
             </field>
+            <xpath expr="//label[@for='journal_id']" position="attributes">
+                <attribute name="groups">account.group_account_readonly,account.group_account_invoice</attribute>
+            </xpath>
+            <xpath expr="//div[@name='journal_div']" position="attributes">
+                <attribute name="groups">account.group_account_readonly,account.group_account_invoice</attribute>
+            </xpath>
         </field>
     </record>
 </odoo>
