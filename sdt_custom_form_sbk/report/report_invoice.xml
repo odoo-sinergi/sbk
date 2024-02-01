@@ -13,53 +13,57 @@
                     </p>
                 </div>
                 <div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="row">
-                                <span>Prepared By</span>
+                    <center>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="row">
+                                    <span>Prepared By</span>
+                                </div>
+                                <div class="row" style="border-bottom: 1px solid black;">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="row">
+                                    <span>Date :</span>
+                                </div>
                             </div>
-                            <div class="row" style="border-bottom: 1px solid black;">
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
+                            <div class="col-1"></div>
+                            <div class="col-3">
+                                <div class="row">
+                                    <span>Approved By</span>
+                                </div>
+                                <div class="row" style="border-bottom: 1px solid black;">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="row">
+                                    <span>Date :</span>
+                                </div>
                             </div>
-                            <div class="row">
-                                <span>Date :</span>
+                            <div class="col-1"></div>
+                            <div class="col-3">
+                                <div class="row">
+                                    <span>Received By</span>
+                                </div>
+                                <div class="row" style="border-bottom: 1px solid black;">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                                <div class="row">
+                                    <span>Date :</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <div class="row">
-                                <span>Approved By</span>
-                            </div>
-                            <div class="row" style="border-bottom: 1px solid black;">
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                            </div>
-                            <div class="row">
-                                <span>Date :</span>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="row">
-                                <span>Received By</span>
-                            </div>
-                            <div class="row" style="border-bottom: 1px solid black;">
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                            </div>
-                            <div class="row">
-                                <span>Date :</span>
-                            </div>
-                        </div>
-                    </div>
+                    </center>
                 </div>
             </xpath>
         </template>
