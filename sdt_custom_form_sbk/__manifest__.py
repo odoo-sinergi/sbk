@@ -28,6 +28,7 @@
         'report/purchase_order.xml',
         'report/report_invoice.xml',
         'report/report_saleorder_pro_forma.xml',
+        'report/report_deliveryslip.xml',
     ],
     # only loaded in demonstration mode
 }
