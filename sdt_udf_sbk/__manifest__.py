@@ -10,9 +10,11 @@
     'summary': 'UDF SBK',
     'website': 'http://sinergidata.co.id',
     'data': [
+        'security/security.xml',
         'views/purchase_order.xml',
         'views/stock_picking.xml',
         'views/account_move.xml',
+        'views/stock_quant.xml',
     ],
     'depends': ['base','delivery','stock','purchase','account'],
     'installable': True,
