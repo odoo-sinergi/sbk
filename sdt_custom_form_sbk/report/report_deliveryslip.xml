@@ -1,28 +1,8 @@
 <odoo>
     <data>
 
-        <template id="sdt_report_invoice_document_inherit" inherit_id="account.report_invoice_document">
-            <xpath expr="//div[@class='mt-5']/div[@class='page']/h2[1]/span[7]" position="replace">
-                <t t-if="o.name != '/'">
-                    <t t-if="o.source_picking">
-                        <span t-esc="'{0} - {1}'.format(o.name, o.source_picking)"/>
-                    </t>
-                    <t t-else="">
-                        <span t-if="o.name != '/'" t-esc="o.name"/>
-                    </t>
-                </t>
-            </xpath>
-
-            <xpath expr="//div[@id='qrcode']" position="after">
-                <div>
-                    <p>
-                        <b>TOP:</b>
-                        <br>Dibayarkan ke Rekening:</br>
-                        <br>BCA (KCP Pecenongan)</br>
-                        <br>PT Sumber Berlian Kimia</br>
-                        <br>5890203835</br>
-                    </p>
-                </div>
+        <template id="sdt_report_delivery_document_inherit" inherit_id="stock.report_delivery_document">
+            <xpath expr="//div[@name='signature']" position="before">
                 <div>
                     <div class="row">
                         <div class="col-3">
@@ -77,6 +57,5 @@
                 </div>
             </xpath>
         </template>
-
     </data>
 </odoo>
