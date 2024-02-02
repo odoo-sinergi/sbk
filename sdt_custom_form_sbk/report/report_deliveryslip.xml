@@ -4,12 +4,21 @@
         <template id="sdt_report_delivery_document_inherit" inherit_id="stock.report_delivery_document">
             <xpath expr="//div[@name='signature']" position="before">
                 <div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
                     <div class="row">
                         <div class="col-3">
                             <div class="row">
                                 <span>Prepared By</span>
                             </div>
                             <div class="row" style="border-bottom: 1px solid black;">
+                                <br/>
+                                <br/>
+                                <br/>
                                 <br/>
                                 <br/>
                                 <br/>
@@ -31,6 +40,9 @@
                                 <br/>
                                 <br/>
                                 <br/>
+                                <br/>
+                                <br/>
+                                <br/>
                             </div>
                             <div class="row">
                                 <span>Date :</span>
@@ -42,6 +54,9 @@
                                 <span>Received By</span>
                             </div>
                             <div class="row" style="border-bottom: 1px solid black;">
+                                <br/>
+                                <br/>
+                                <br/>
                                 <br/>
                                 <br/>
                                 <br/>
