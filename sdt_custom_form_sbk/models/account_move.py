@@ -5,6 +5,8 @@ class AccountMove(models.Model):
     _inherit = "account.move"
     _template = 'form_standard_odoo.standard_sales_invoice_document'
 
+    source_picking = fields.Char("Picking Source", compute="_compute_source_picking")
+
     def terbilang_idr(self):
         return terbilang.terbilang(self.amount_total, 'idr', 'id')
 
@@ -18,3 +20,14 @@ class AccountMove(models.Model):
             'docs': self,
         }
         return report_obj.render(self._template, docargs)
+    
+    @api.depends('invoice_origin')
+    def _compute_source_picking(self):
+        for am in self:
+            so_obj = self.env['sale.order'].search([('name', '=', am.invoice_origin)])
+            picking_name = False
+            if so_obj:
+                picking_obj = self.env['stock.picking'].search([('origin','=',so_obj.name)])
+            if picking_obj:
+                picking_name = picking_obj.name
+            am.source_picking = picking_name
