@@ -27,7 +27,9 @@ class AccountMove(models.Model):
             so_obj = self.env['sale.order'].search([('name', '=', am.invoice_origin)])
             picking_name = False
             if so_obj:
-                picking_obj = self.env['stock.picking'].search([('origin','=',so_obj.name)])
+                picking_obj = self.env['stock.picking'].search([('origin','=',so_obj.name),
+                                                                ('name', 'ilike', 'WH/OUT/'),
+                                                                ], order="id desc", limit=1)
             if picking_obj:
                 picking_name = picking_obj.name
             am.source_picking = picking_name

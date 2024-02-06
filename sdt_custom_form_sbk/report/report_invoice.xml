@@ -1,7 +1,7 @@
 <odoo>
     <data>
 
-        <template id="sdt_report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+        <template id="  " inherit_id="account.report_invoice_document">
             <xpath expr="//div[@class='mt-5']/div[@class='page']/h2[1]/span[7]" position="replace">
                 <t t-if="o.name != '/'">
                     <t t-if="o.source_picking">
@@ -23,58 +23,74 @@
                         <br>5890203835</br>
                     </p>
                 </div>
-                <div>
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="row">
-                                <span>Prepared By</span>
-                            </div>
-                            <div class="row" style="border-bottom: 1px solid black;">
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                            </div>
-                            <div class="row">
-                                <span>Date :</span>
-                            </div>
-                        </div>
-                        <div class="col-1"></div>
-                        <div class="col-3">
-                            <div class="row">
-                                <span>Approved By</span>
-                            </div>
-                            <div class="row" style="border-bottom: 1px solid black;">
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                            </div>
-                            <div class="row">
-                                <span>Date :</span>
-                            </div>
-                        </div>
-                        <div class="col-1"></div>
-                        <div class="col-3">
-                            <div class="row">
-                                <span>Received By</span>
-                            </div>
-                            <div class="row" style="border-bottom: 1px solid black;">
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                                <br/>
-                            </div>
-                            <div class="row">
-                                <span>Date :</span>
-                            </div>
-                        </div>
-                        <div class="col-1"></div>
-                    </div>
-                </div>
+                <table width="100%" style="border: 0px solid white;">
+                    <tr>
+                        <td>
+                            <table width="100%" style="border: 0px solid white;">
+                                <tr>
+                                    <th>Prepared By</th>
+                                    <th>Approved By</th>
+                                    <th>Received By</th>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>&amp;nbsp;</td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 50px;">Date :</td>
+                                    <td style="padding-left: 50px;">Date :</td>
+                                    <td style="padding-left: 50px;">Date :</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
             </xpath>
         </template>
 
