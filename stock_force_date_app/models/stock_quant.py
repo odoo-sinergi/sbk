@@ -70,7 +70,8 @@ class StockQuant(models.Model):
 													quant.location_id,
 													quant.product_id.with_company(quant.company_id).property_stock_inventory,
 													out=True))
-			force_date = quant.accounting_date or force_date
+			if self.env.user.has_group('stock_force_date_app.group_stock_force_date'):
+				force_date = quant.accounting_date or force_date
 			for move in move_vals:
 				move['date'] = force_date
 				for move_line in move['move_line_ids']:
@@ -79,7 +80,7 @@ class StockQuant(models.Model):
 		moves = self.env['stock.move'].with_context(inventory_mode=False).create(move_vals)
 		moves._action_done()
 		for quant in self:
-			force_date = quant.accounting_date or fields.Date.today()
+			force_date = quant.accounting_date or fields.Date.today() if self.env.user.has_group('stock_force_date_app.group_stock_force_date') else fields.Date.today()
 			for move in moves:
 				if move.date != force_date:
 					# for move_line in move.move_line_ids:
