@@ -1,7 +1,7 @@
 <odoo>
     <data>
 
-        <template id="sdt_report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+        <template id=" " inherit_id="account.report_invoice_document">
             <xpath expr="//div[@class='mt-5']/div[@class='page']/h2[1]/span[7]" position="replace">
                 <t t-if="o.name != '/'">
                     <t t-if="o.source_picking">
