@@ -2,7 +2,7 @@
     <data>
 
         <template id="sdt_report_delivery_document_inherit" inherit_id="stock.report_delivery_document">
-            <!-- <xpath expr="//div[@name='signature']" position="before">
+            <xpath expr="//div[@name='signature']" position="before">
                 <div>
                     <br/>
                     <br/>
@@ -79,7 +79,7 @@
                         </tr>
                     </table>
                 </div>
-            </xpath> -->
+            </xpath>
 
             <xpath expr="//table[@name='stock_move_table']" position="replace">
                 <table class="table table-sm" t-if="o.state!='done'" name="stock_move_table">
