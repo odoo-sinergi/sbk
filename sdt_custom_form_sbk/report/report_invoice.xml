@@ -23,74 +23,62 @@
                         <br>5890203835</br>
                     </p>
                 </div>
-                <table width="100%" style="border: 0px solid white;">
-                    <tr>
-                        <td>
-                            <table width="100%" style="border: 0px solid white;">
-                                <tr>
-                                    <th>Prepared By</th>
-                                    <th>Approved By</th>
-                                    <th>Received By</th>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td>&amp;nbsp;</td>
-                                    <td/>
-                                    <td/>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 50px;">Date :</td>
-                                    <td style="padding-left: 50px;">Date :</td>
-                                    <td style="padding-left: 50px;">Date :</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+                <div>
+                    <br/>
+                    <br/>
+                    <table width="100%" style="border: 0px solid white; page-break-inside: avoid;">
+                        <tr>
+                            <th class="text-start">Prepared By</th>
+                            <th class="text-start">Approved By</th>
+                            <th class="text-start">Received By</th>
+                        </tr>
+                        <tr>
+                            <td>&amp;nbsp;</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td>&amp;nbsp;</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td>&amp;nbsp;</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td>&amp;nbsp;</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td>&amp;nbsp;</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td>&amp;nbsp;</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td>&amp;nbsp;</td>
+                            <td/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td><div style="border-bottom: 1px solid black; width: 150px;"/></td>
+                            <td><div style="border-bottom: 1px solid black; width: 150px;"/></td>
+                            <td><div style="border-bottom: 1px solid black; width: 150px;"/></td>
+                        </tr>
+                        <tr>
+                            <td class="text-start">Date :</td>
+                            <td class="text-start">Date :</td>
+                            <td class="text-start">Date :</td>
+                        </tr>
+                    </table>
+                </div>
             </xpath>
         </template>
 
