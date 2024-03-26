@@ -11,7 +11,7 @@ class AccountMove(models.Model):
     no_sj_supplier = fields.Char(string='No. Surat Jalan Supplier')
     payment_date = fields.Date(string='Payment Date', compute='_compute_payment_date', store=True)
 
-    @api.depends('state','amount_residual')
+    @api.depends('state','amount_residual','payment_state')
     def _compute_payment_date(self):
         for data in self:
             payment_date =  False
