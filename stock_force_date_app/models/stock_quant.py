@@ -109,18 +109,18 @@ class StockQuant(models.Model):
 			move_vals = []
 			if float_compare(quant.inventory_diff_quantity, 0, precision_rounding=quant.product_uom_id.rounding) > 0:
 				move_vals.append(
-                    quant._get_inventory_move_values(quant.inventory_diff_quantity,
-                                                     quant.product_id.with_company(quant.company_id).property_stock_inventory,
-                                                     quant.location_id, package_dest_id=quant.package_id))
+					quant._get_inventory_move_values(quant.inventory_diff_quantity,
+													quant.product_id.with_company(quant.company_id).property_stock_inventory,
+													quant.location_id))
 				moves = self.env['stock.move'].with_context(inventory_mode=False).create(move_vals)
 				moves.with_context(accounting_date=quant.accounting_date)._action_done()
 			else:
 				move_vals = []
 				move_vals.append(
                     quant._get_inventory_move_values(-quant.inventory_diff_quantity,
-                                                     quant.location_id,
-                                                     quant.product_id.with_company(quant.company_id).property_stock_inventory,
-                                                     package_id=quant.package_id))
+													quant.location_id,
+													quant.product_id.with_company(quant.company_id).property_stock_inventory,
+													out=True))
 				moves = self.env['stock.move'].with_context(inventory_mode=False).create(move_vals)
 				moves.with_context(accounting_date=quant.accounting_date)._action_done()
 		has_forcedate_group = self.env.user.has_group('stock_force_date_app.group_stock_force_date')
