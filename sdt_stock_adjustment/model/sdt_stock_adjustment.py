@@ -21,18 +21,18 @@ SESSION_STATES =[('open','Open'),('close','Close')]
 class StockAdjustment(models.Model):
     _name = 'sdt.stock.adjustment'
     
-    name = fields.Char('Title', default='Draft',)
-    reference = fields.Char('Reference', required='True')
+    name = fields.Char('Title', default='Draft', copy=False)
+    reference = fields.Char('Reference', required='True', copy=False)
     date = fields.Datetime('Inventory Date', required=True, default=lambda self: time.strftime("%Y-%m-%d %H:%M:%S"))
     accounting_date = fields.Date('Accounting Date', required=True, default=lambda self: time.strftime("%Y-%m-%d"))
     location_id = fields.Many2one('stock.location', 'Inventoried Location', required=True)
-    is_active=fields.Boolean(string='Active')
+    is_active=fields.Boolean(string='Active', copy=False)
     company_id = fields.Many2one(
         'res.company', 'Company',
         readonly=True, index=True, required=True,
         states={'draft': [('readonly', False)]},
         default=lambda self: self.env.company)
-    state = fields.Selection(string='State', selection=SESSION_STATES, required=False, readonly=True, default=SESSION_STATES[0][0])
+    state = fields.Selection(string='State', selection=SESSION_STATES, required=False, readonly=True, copy=False, default=SESSION_STATES[0][0])
     detail_ids=fields.One2many('sdt.stock.adjustment.details', 'adjustment_id', string='Detail Stock Adjustment', copy=True, readonly=True,)
 
     
