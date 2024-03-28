@@ -17,24 +17,29 @@ _logger = logging.getLogger(__name__)
 
 SESSION_STATES =[('open','Open'),('close','Close')]
 
-def _get_default_name(self):
-    return self.env['ir.sequence'].next_by_code('sdt.stock.adjustment')
+
 
 class StockAdjustment(models.Model):
     _name = 'sdt.stock.adjustment'
-
-    name = fields.Char('Inventory Reference', required='True')
+    
+    name = fields.Char('Title', default='Draft', copy=False)
+    reference = fields.Char('Reference', required='True', copy=False)
     date = fields.Datetime('Inventory Date', required=True, default=lambda self: time.strftime("%Y-%m-%d %H:%M:%S"))
     accounting_date = fields.Date('Accounting Date', required=True, default=lambda self: time.strftime("%Y-%m-%d"))
     location_id = fields.Many2one('stock.location', 'Inventoried Location', required=True)
-    is_active=fields.Boolean(string='Active')
+    is_active=fields.Boolean(string='Active', copy=False)
     company_id = fields.Many2one(
         'res.company', 'Company',
         readonly=True, index=True, required=True,
         states={'draft': [('readonly', False)]},
         default=lambda self: self.env.company)
-    state = fields.Selection(string='State', selection=SESSION_STATES, required=False, readonly=True, default=SESSION_STATES[0][0])
+
+    state = fields.Selection(string='State', selection=SESSION_STATES, required=False, readonly=True, copy=False, default=SESSION_STATES[0][0])
     detail_ids=fields.One2many('sdt.stock.adjustment.details', 'adjustment_id', string='Detail Stock Adjustment', copy=True, readonly=True,)
+
+    
+    def _get_default_name(self):
+        return self.env['ir.sequence'].next_by_code('sdt.stock.adjustment')
 
     # def add_adjustment(self,ntotal):
     #     sql_query = """select * from sdt_stock_adjustment where state='open' and is_active='Y' limit %s
@@ -128,6 +133,9 @@ class StockAdjustment(models.Model):
     def button_active(self):
         for data in self:
             if data.state=='open':
+
+                if data.name == 'Draft':
+                    data.name = data._get_default_name()
                 if data.is_active==False:
                     data.is_active=True
                 else:
@@ -273,12 +281,11 @@ class StockAdjustmentDetails(models.Model):
             raise UserError('Inventoried Location can not be empty.')
         if not self.product_id:
             return
-        uom_id = self.env['product.template'].search([('id', '=', self.product_id.product_tmpl_id.id)]).uom_id
-        uom_list = []
-        if uom_id:
-                uom_list.append(uom_id.id)
 
-        domain = {'product_uom_id': [('id', '=', uom_id.id)]}
+        
+        self.product_uom_id = self.product_id.uom_id
+
+        domain = {'product_uom_id': [('id', '=', self.product_id.uom_id.id)]}
         return {'domain': domain}
     
     def action_inventory_history(self):

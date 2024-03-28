@@ -25,7 +25,8 @@ Manage
 		"security/security.xml",
 		"security/ir.model.access.csv",
 		"data/schedule.xml",
-		# "data/sequence_data.xml",
+
+		"data/sequence_data.xml",
 		"view/sdt_stock_adjustment.xml",
 	],
 	"application": True,
