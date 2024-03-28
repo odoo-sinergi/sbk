@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<odoo>
+  <data>
+    <record id="add_adjustment_scheduler" model="ir.cron">
+      <field name="interval_type">hours</field>
+      <field name="name">Add Stock Adjustment Scheduler</field>
+      <field name="numbercall">-1</field>
+      <field name="priority">5</field>
+      <field name="doall">False</field>
+      <field name="active">False</field>
+      <field name="interval_number">1</field>
+      <field name="model_id" ref="model_sdt_stock_adjustment"/>
+      <field name="state">code</field>
+      <field name="code">model.add_adjustment(1)</field>
+    </record>
+  </data>
+</odoo>

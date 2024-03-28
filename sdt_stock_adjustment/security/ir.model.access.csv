@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sdt_stock_adjustment,sdt.stock.adjustment,model_sdt_stock_adjustment,group_sdt_stock_adjustment,1,1,1,1
+access_sdt_stock_adjustment_details,sdt.stock.adjustment.details,model_sdt_stock_adjustment_details,group_sdt_stock_adjustment,1,1,1,1
+access_upload_excel,upload_excel,model_upload_excel,group_sdt_stock_adjustment,1,1,1,1
