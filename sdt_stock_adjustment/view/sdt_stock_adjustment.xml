@@ -1,0 +1,136 @@
+<odoo>
+    <data>
+        <record id="view_sdt_stock_adjustment_tree" model="ir.ui.view">
+            <field name="name">sdt.stock.adjustment.tree</field>
+            <field name="model">sdt.stock.adjustment</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="7"/>
+            <field name="arch" type="xml">
+                <tree string="Stock Adjustment" >
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="location_id"/>
+                    <field name="is_active"/>
+                    <field name="state"/> 
+                </tree>
+            </field>
+        </record>
+
+        <!--form upload-->
+        <record id="view_upload_from_excel_wiz" model="ir.ui.view">
+            <field name="name">upload.from.excel.wiz</field>
+            <field name="model">upload.excel</field>
+            <field name="arch" type="xml">
+                <form string="Conversion" version="7.0">
+                    <group>
+                        <field name="receipt_id" invisible="1" />
+                        <field name="file" required='1'/>
+                    </group>
+                    <footer>
+                        <button name="create_upload" string="Upload" type="object" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_upload" model="ir.actions.act_window">
+            <field name="name">Upload from Excel</field>
+            <field name="res_model">upload.excel</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_upload_from_excel_wiz"/>
+            <field name="target">new</field>
+        </record>
+
+        <!-- form -->
+        <record id="view_stock_adjustment_form" model="ir.ui.view">
+            <field name="name">sdt.stock.adjustment.form</field>
+            <field name="model">sdt.stock.adjustment</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Stock Adjustment" >
+                    <header>
+                        <button name="%(action_upload)d" type='action' context="{'receipt_ids': [id]}" string='Upload from Excel' attrs="{'invisible':[('state','=','close')]}"/>
+                        <field name="state" widget="statusbar" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                             <button name="button_active" type="object" class="oe_stat_button" icon="fa-clock-o" attrs="{'invisible':[('state','=','close')]}">
+                                <field name="is_active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;is_active&quot;}" string="Active"/> 
+                                <span> Active</span>
+                             </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <h1 class="d-flex">
+                                <field name="name" force_save="1" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="reference" attrs="{'readonly':[('state','=','close')]}"/>
+                                <field name="location_id" attrs="{'readonly':[('state','=','close')]}" options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="date" attrs="{'readonly':[('state','=','close')]}"/>
+                                <field name="accounting_date" attrs="{'readonly':[('state','=','close')]}"/>
+                                <field name="company_id" attrs="{'readonly':[('state','=','close')]}" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                         <notebook>
+                              <page string="Detail">
+                                  <field name="detail_ids" widget="section_and_note_one2many" attrs="{'readonly':[('state','=','close')]}">
+                                     <tree string="Detail Adjustment" editable="bottom" default_order="id">
+                                        <field name="barcode" readonly="1"/>
+                                        <field name="product_id" options="{'no_create': True}" required="1"/>
+                                        <field name="product_uom_id" options="{'no_create': True}" required="1"/>
+                                        <field name="tracking" invisible="1"/>
+                                        <field name="lot_name" attrs="{'readonly':[('tracking','=','none')]}"/>
+                                        <field name="quantity_as_off"/>
+                                        <field name="quantity_diff"/>
+                                        <field name="quantity"/>
+                                        <field name="move_id" invisible="1"/>
+                                        <button name="action_inventory_history" type="object" class="btn btn-link text-info" icon="fa-history" string="History" attrs="{'invisible':[('move_id', '=', False)]}"/>
+                                        <field name="inv_id" optional="hide"/>
+                                     </tree>
+                                  </field>
+                              </page>
+                         </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_sdt_stock_adjustment_view" model="ir.actions.act_window" >
+              <field name="name">SDT Stock Adjustment</field>
+              <field name="res_model">sdt.stock.adjustment</field>
+              <field name="type">ir.actions.act_window</field>
+              <field name="view_mode">tree,form</field>
+              <field name="view_id" ref="view_sdt_stock_adjustment_tree"/>
+              <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Klik untuk membuat Stock Adjustment
+                </p>
+                  <p>Klik tombol create untuk membuat Stock Adjustment baru</p>
+              </field>
+        </record>
+
+        <record id="action_server_active_sdt_stock_adjustment" model="ir.actions.server">
+            <field name="name">Active</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_sdt_stock_adjustment" />
+            <field name="binding_model_id" ref="model_sdt_stock_adjustment" />
+            <field name="state">code</field>
+            <field name="code">records.button_active()</field>
+        </record>
+
+        <menuitem 
+        action="act_sdt_stock_adjustment_view" 
+        id="menu_sdt_stock_adjustment" 
+        parent="stock.menu_stock_warehouse_mgmt" 
+        sequence="10"/>
+
+    </data>
+</odoo>

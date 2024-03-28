@@ -10,7 +10,7 @@ class StockMove(models.Model):
 	_inherit = 'stock.move'
 
 	def _action_done(self, cancel_backorder=False):
-		force_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+		force_date = False
 		if self.env.user.has_group('stock_force_date_app.group_stock_force_date'):
 			for move in self:
 				if move.date:
