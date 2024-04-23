@@ -2,6 +2,10 @@
     <data>
 
         <template id="sdt_report_purchaseorder_document_inherit" inherit_id="purchase.report_purchaseorder_document">
+            <xpath expr="//t[@t-set='address']/div[1]" position="replace">
+                <div t-field="o.partner_id"
+                     t-options='{"widget": "contact", "fields": ["address", "name", "mobile", "vat"], "no_marker": True, "phone_icons": True}'/>
+            </xpath>
             <xpath expr="//p[@class='mt-4']" position="after">
                 <div class="row">
                     <div class="col-12"> 
