@@ -27,10 +27,12 @@
 
     # always loaded
     'data': [
+        'report/report_templates.xml',
         'report/purchase_order.xml',
         'report/report_invoice.xml',
         'report/report_deliveryslip.xml',
         'report/report_saleorder_pro_forma.xml',
+        'views/base_document_layout_views.xml',
     ],
     # only loaded in demonstration mode
 }
