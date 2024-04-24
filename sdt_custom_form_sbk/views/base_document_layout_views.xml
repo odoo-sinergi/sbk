@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="web.view_base_document_layout"/>
             <field name="arch" type="xml">
                 <xpath expr="//form[1]/group[1]/group[1]/field[@name='company_details']" position="after">
-                    <field name="company_details" string="Company Details 2" options="{'resizable': false}"/>
+                    <field name="company_details2" string="Company Details 2" options="{'resizable': false}"/>
                 </xpath>
             </field>
         </record>
