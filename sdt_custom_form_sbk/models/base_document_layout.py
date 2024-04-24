@@ -9,7 +9,7 @@ class BaseDocumentLayout(models.TransientModel):
     _inherit = 'base.document.layout'
 
     @api.model
-    def _default_company_details(self):
+    def _default_company_details2(self):
         company = self.env.company
         address_format, company_data = company.partner_id._prepare_display_address()
         address_format = self._clean_address_format(address_format, company_data)
