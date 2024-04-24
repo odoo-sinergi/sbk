@@ -19,4 +19,4 @@ class BaseDocumentLayout(models.TransientModel):
             company_data['company_name'] = company_data['company_name'] or company.name
         return Markup(nl2br(address_format)) % company_data
     
-    company_details2 = fields.Html(related='company_id.company_details', readonly=False, default=_default_company_details2)
+    company_details2 = fields.Html(related='company_id.company_details2', readonly=False, default=_default_company_details2)
