@@ -27,6 +27,7 @@
 
     # always loaded
     'data': [
+        'report/report_templates.xml',
         'report/purchase_order.xml',
         'report/report_invoice.xml',
         'report/report_deliveryslip.xml',
