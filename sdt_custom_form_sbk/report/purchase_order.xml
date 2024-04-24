@@ -1,6 +1,5 @@
 <odoo>
     <data>
-
         <template id="sdt_report_purchaseorder_document_inherit" inherit_id="purchase.report_purchaseorder_document">
             <xpath expr="//t[@t-call='web.external_layout']" position="replace">
                 <t t-call="sdt_custom_form_sbk.external_layout2">
