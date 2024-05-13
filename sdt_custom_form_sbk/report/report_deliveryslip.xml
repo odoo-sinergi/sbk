@@ -16,6 +16,9 @@
             </xpath>
 
             <xpath expr="//div[@name='signature']" position="before">
+                <div t-if="o.sale_id.note">
+                    <div t-field="o.sale_id.note"/>
+                </div>
                 <div>
                     <br/>
                     <br/>
