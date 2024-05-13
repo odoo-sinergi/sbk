@@ -75,7 +75,7 @@
                                 </t>
                                 <t t-if="o.state != 'done'">
                                     <p t-field="o.scheduled_date"/>
-                            </t>
+                                </t>
                             </div>
                         </div>
                         <table class="table table-sm" t-if="o.state!='done'" name="stock_move_table">
@@ -210,6 +210,10 @@
                                 </tbody>
                             </table>
                         </t>
+
+                        <div t-if="o.sale_id.note">
+                            <div t-field="o.sale_id.note"/>
+                        </div>
 
                         <div t-if="o.signature" class="mt32 ml64 mr4" name="signature">
                             <div class="offset-8">
