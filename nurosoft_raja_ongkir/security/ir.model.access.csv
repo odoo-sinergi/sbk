@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_raja_ongkir_city,raja.ongkir.city,model_raja_ongkir_city,,1,1,1,1
+access_raja_ongkir_carrier,raja.ongkir.carrier,model_raja_ongkir_carrier,,1,1,1,1
+access_raja_ongkir_subdistrict,raja.ongkir.subdistrict,model_raja_ongkir_subdistrict,,1,1,1,1
+access_raja_ongkir_waybill,raja.ongkir.waybill,model_raja_ongkir_waybill,,1,1,1,1
+access_jenis_layanan,jenis.layanan,model_jenis_layanan,,1,1,1,1

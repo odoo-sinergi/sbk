@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <!-- <template id="assets_frontend" inherit_id="website.assets_frontend" name="Shop">
+      <xpath expr="." position="inside">
+        <script type="text/javascript" src="/nurosoft_raja_ongkir/static/src/js/delivery.js"></script>
+        <link rel='stylesheet' href='/nurosoft_raja_ongkir/static/src/css/custom.css'/>
+      </xpath>
+    </template> -->
+
+    <record id="raja_ongkir_city_form" model="ir.ui.view">
+        <field name="name">raja.ongkir.city</field>
+        <field name="model">raja.ongkir.city</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="province" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="type" readonly="1"/>
+                        <field name="postal_code" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="raja_ongkir_carrier_form" model="ir.ui.view">
+        <field name="name">raja.ongkir.carrier</field>
+        <field name="model">raja.ongkir.carrier</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="website_publish_button" type="object" icon="fa-globe">
+                            <field name="website_published" widget="website_button"/>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="raja_ongkir_subdistrict_form" model="ir.ui.view">
+        <field name="name">raja.ongkir.subdistrict</field>
+        <field name="model">raja.ongkir.subdistrict</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="province"/>
+                        </group>
+                        <group>
+                            <field name="city_type"/>
+                            <field name="city"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ir_actions_server_raja_ongkir_waybill" model="ir.actions.server">
+        <field name="name">Cek Resi</field>
+        <field name="model_id" ref="nurosoft_raja_ongkir.model_raja_ongkir_waybill"/>
+        <field name="state">code</field>
+        <field name="code">action = model.open_raja_ongkir_waybill()</field>
+    </record>
+
+    <record id="raja_ongkir_waybill_form" model="ir.ui.view">
+        <field name="name">raja.ongkir.waybill</field>
+        <field name="model">raja.ongkir.waybill</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <button name="check_waybill" string="Cek Resi" type="object" class="btn-primary"/>
+                </header>
+                <sheet>                    
+                    <group>
+                        <group>
+                            <field name="carrier_id"/>
+                        </group>
+                        <group>
+                            <field name="waybill"/>
+                        </group>
+                    </group>
+                    <hr/>
+                    <group>
+                        <group>
+                            <field name="service_code" readonly="1"/>
+                            <field name="waybill_date" readonly="1"/>
+                            <field name="shipper_name" readonly="1"/>
+                            <field name="receiver_name" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="origin" readonly="1"/>
+                            <field name="destination" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="raja_ongkir_city_tree" model="ir.ui.view">
+        <field name="name">raja.ongkir.city.tree</field>
+        <field name="model">raja.ongkir.city</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="province" />
+                <field name="type" />
+                <field name="postal_code" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="raja_ongkir_carrier_tree" model="ir.ui.view">
+        <field name="name">raja.ongkir.carrier.tree</field>
+        <field name="model">raja.ongkir.carrier</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code" />
+                <field name="name" />
+                <field name="website_published" />
+            </tree>
+        </field>
+    </record>
+
+     <record id="raja_ongkir_subdistrict_tree" model="ir.ui.view">
+        <field name="name">raja.ongkir.subdistrict.tree</field>
+        <field name="model">raja.ongkir.subdistrict</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="city_type" />
+                <field name="city" />
+                <field name="province" />
+            </tree>
+        </field>
+    </record>
+    
+    <act_window
+        id="action_open_city"
+        name="Daftar Kabupaten Kota"
+        res_model="raja.ongkir.city"/>
+
+    <act_window
+        id="action_open_carrier"
+        name="Daftar Ekpedisi"
+        res_model="raja.ongkir.carrier"/>
+
+    <act_window
+        id="action_open_subdistrict"
+        name="Daftar Kecamatan"
+        res_model="raja.ongkir.subdistrict"/>
+
+    <menuitem name="Raja Ongkir"
+        id="raja_ongkir_main"
+        parent="website.menu_website_global_configuration" 
+        groups="base.group_system" 
+        sequence="200"/>
+
+    
+
+    <menuitem name="Kabupaten Kota"
+        id="raja_ongkir_kota"
+        parent="raja_ongkir_main"
+        action="nurosoft_raja_ongkir.action_open_city"
+        sequence="10" />
+
+    <menuitem name="Kecamatan"
+        id="raja_ongkir_subdistrict"
+        parent="raja_ongkir_main"
+        action="nurosoft_raja_ongkir.action_open_subdistrict"
+        sequence="20" />
+
+    <menuitem name="Ekpedisi"
+        id="raja_ongkir_carrier"
+        parent="raja_ongkir_main"
+        action="nurosoft_raja_ongkir.action_open_carrier"
+        sequence="30" />   
+
+    <menuitem name="Cek Resi"
+        id="raja_ongkir_waybill"
+        parent="raja_ongkir_main"
+        action="nurosoft_raja_ongkir.ir_actions_server_raja_ongkir_waybill"
+        sequence="40" /> 
+
+    
+
+    <record id="view_delivery_carrier_form_with_provider_raja_ongkir" model="ir.ui.view">
+        <field name="name">delivery.carrier.form.provider.raja.ongkir</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <sheet position="before">
+                <header attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}">
+                    <button name="raja_ongkir_action_update_city" string="Update Data Kabupaten  / Kota" type="object" class="btn-primary"/>
+                    <button name="raja_ongkir_action_update_subdisctrict" string="Update Data Kecamatan" type="object" class="btn-primary"/>
+                </header>
+            </sheet>
+            <field name="integration_level" position="after">
+                <field name="raja_ongkir_api_key" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')], 'required': [('delivery_type', '=', 'raja_ongkir')]}" />
+                <field name="raja_ongkir_account_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')], 'required': [('delivery_type', '=', 'raja_ongkir')]}" />
+                <field name="raja_ongkir_origin_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}" />
+                <field name="raja_ongkir_destination_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}" />
+                <field name="raja_ongkir_city_origin_id" attrs="{'invisible': ['|',('delivery_type', '!=', 'raja_ongkir'),('raja_ongkir_origin_type','=','subdistrict')]}" />
+                <field name="raja_ongkir_subdistrict_origin_id" attrs="{'invisible': ['|',('delivery_type', '!=', 'raja_ongkir'),('raja_ongkir_origin_type','=','city')]}" />
+            </field>
+        </field>
+    </record>
+
+
+
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">view.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                <field name="delivery_type" invisible="1" />
+                <field name="raja_ongkir_name" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}"/>
+                <field name="raja_ongkir_description" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}"/>
+                <field name="raja_ongkir_city" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}"/>
+                <field name="raja_ongkir_etd" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}"/>
+                <field name="raja_ongkir_value" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}"/>
+                <field name="raja_ongkir_weight" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}"/>
+            </field>
+        </field>
+    </record>
+
+    
+    <record id="jenis_layanan_form" model="ir.ui.view">
+        <field name="name">jenis.layanan.form</field>
+        <field name="model">choose.delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.choose_delivery_carrier_view_form"/>
+        <field name="arch" type="xml">
+            <field name="carrier_id" position="after">
+                    <field name="jenis_layanan_rel" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}" />
+                    <field name="cost_layanan"  widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}"/>
+            </field>
+        </field>
+    </record>
+    <record id="hide_display_form" model="ir.ui.view">
+        <field name="name">hide.display.form</field>
+        <field name="model">choose.delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.choose_delivery_carrier_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_price']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|',('carrier_id','=', False),('delivery_type', '=', 'raja_ongkir')]}</attribute>
+            </xpath>
+            <xpath expr="//label[@for='display_price']" position="attributes">
+                <attribute name="attrs">{'invisible': [('delivery_type', '=', 'raja_ongkir')]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='update_price']" position="attributes">
+                <attribute name="attrs">{'invisible': [('delivery_type','in', ('fixed', 'base_on_rule','raja_ongkir'))]}</attribute>
+            </xpath>
+        </field>
+    </record>
+</data>
+</odoo>
