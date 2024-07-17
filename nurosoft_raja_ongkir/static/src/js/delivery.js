@@ -83,7 +83,6 @@ odoo.define('nurosoft_raja_ongkir.delivery', function (require) {
                 $amountUntaxed.html(result.new_amount_untaxed);
                 $amountTax.html(result.new_amount_tax);
                 $amountTotal.html(result.new_amount_total);
-                $payButton.data('disabled_reasons').carrier_selection = false;
                 $payButton.prop('disabled', _.contains($payButton.data('disabled_reasons'), true));
                 
                 if(!is_raja_ongkir || $('.ekspedisi-selected').length > 0){
@@ -106,7 +105,6 @@ odoo.define('nurosoft_raja_ongkir.delivery', function (require) {
             var $payButton = $('button[name="o_payment_submit_button"]');
             $payButton.prop('disabled', true);
             $payButton.data('disabled_reasons', $payButton.data('disabled_reasons') || {});
-            $payButton.data('disabled_reasons').carrier_selection = true;
             carrier_id = $radio.val();
             this.check_carrier();
         },

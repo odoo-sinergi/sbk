@@ -4,7 +4,7 @@
     "name": "Biaya Pengiriman Indonesia RajaOngkir",
     "author": "Nurosoft Consulting",
     "website": "https://nurosoft.id",
-    "version": "16.0.1.11",
+    "version": "16.0.1.16",
     "category": "",
     "depends": [
         'base','web','website','sale','delivery', 'website_sale_delivery',
