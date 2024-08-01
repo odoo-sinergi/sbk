@@ -1,23 +1,16 @@
-# -*- coding: utf-8 -*-
-
-from odoo import fields, http, SUPERUSER_ID, tools, _
+from odoo import http, tools, _
 from odoo.http import Controller, request, route
 from odoo.addons.website_sale_delivery.controllers.main import WebsiteSaleDelivery
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager, get_records_pager
-import json
-from odoo.exceptions import UserError, ValidationError, MissingError, AccessError
+from odoo.exceptions import ValidationError, MissingError, AccessError
 from odoo.fields import Command
-import logging
 from odoo.addons.payment.controllers.portal import PaymentPortal
 from odoo.addons.payment.controllers.post_processing import PaymentPostProcessing
-
 
 class CustomerPortalInherit(CustomerPortal):
 
     OPTIONAL_BILLING_FIELDS = ["zipcode", "state_id", "vat", "company_name","raja_ongkir_city", "raja_ongkir_city_id", "raja_ongkir_subdistrict_id"]
-
-    
     
     @route(['/my/account'], type='http', auth='user', website=True)
     def account(self, redirect=None, **post):
@@ -213,8 +206,6 @@ class WebsiteSaleDelivery(WebsiteSaleDelivery):
             order._check_carrier_quotation(force_carrier_id=carrier_id, post=post)
         return self._update_website_sale_delivery_return(order, **post)
 
-
-    
     @http.route(['/shop/current_carrier'], type='json', auth='public', methods=['POST'], website=True, csrf=False)
     def get_current_eshop_carrier(self, **post):
         order = request.website.sale_get_order()
@@ -227,7 +218,6 @@ class WebsiteSaleDelivery(WebsiteSaleDelivery):
 
     def _update_website_sale_delivery(self, **post):
         order = request.website.sale_get_order()
-
         carrier_id = int(post['carrier_id'])
         if order:
             order._check_carrier_quotation(force_carrier_id=carrier_id, post=post)
@@ -244,7 +234,6 @@ class WebsiteSaleDelivery(WebsiteSaleDelivery):
         if carrier:
             results.update({'delivery_type': carrier.delivery_type, 'city': order.partner_shipping_id.city})
         return results
-
 
     @http.route(['/shop/get_carrier_list'], type='json', auth='public', methods=['POST'], website=True, csrf=False)
     def get_carrier_list(self, **post):
@@ -309,10 +298,8 @@ class WebsiteSaleDelivery(WebsiteSaleDelivery):
         return results
 
 class PaymentPortal(PaymentPortal):
-    @http.route(
-        '/shop/payment/transaction/<int:order_id>', type='json', auth='public', website=True
-    )
-
+    
+    @http.route('/shop/payment/transaction/<int:order_id>', type='json', auth='public', website=True)
     def shop_payment_transaction(self, order_id, access_token, **kwargs):
         """ Create a draft transaction and return its processing values.
 

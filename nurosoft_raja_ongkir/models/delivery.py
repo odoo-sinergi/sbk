@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-
-from odoo import api, fields, models, tools, _
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 import requests
-import json
-import logging
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'    
@@ -15,7 +11,6 @@ class SaleOrder(models.Model):
     raja_ongkir_etd = fields.Char(string='Perkiraan Sampai')
     raja_ongkir_value = fields.Float(string='Biaya')
     raja_ongkir_weight = fields.Float(string='Berat (gram)')
-
     delivery_type = fields.Selection(related='carrier_id.delivery_type')
 
     def write(self,vals):
@@ -65,7 +60,7 @@ class SaleOrder(models.Model):
                         'raja_ongkir_name': post.get('name'),
                         'raja_ongkir_description': post.get('description'),
                         'raja_ongkir_etd': post.get('etd') + 'HARI',
-                        'raja_ongkir_value': post.get('value'),
+                        'raja_ongkir_value': self.env.ref('base.IDR').compute(post.get('value'), self.currency_id),
                         'raja_ongkir_city': split_city[1],
                         'raja_ongkir_weight': post.get('weight')
                     })
@@ -81,7 +76,30 @@ class SaleOrder(models.Model):
 
         return bool(carrier)
 
-
+    def action_open_delivery_wizard(self):
+        view_id = self.env.ref('delivery.choose_delivery_carrier_view_form').id
+        carrier = (
+            self.with_company(self.company_id).partner_shipping_id.property_delivery_carrier_id
+            or self.with_company(self.company_id).partner_shipping_id.commercial_partner_id.property_delivery_carrier_id
+        )
+        if self.env.context.get('carrier_recompute'):
+            name = _('Update shipping cost')
+        else:
+            name = _('Add a shipping method')
+        
+        return {
+            'name': name,
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'choose.delivery.carrier',
+            'view_id': view_id,
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': {
+                'default_order_id': self.id,
+                'default_carrier_id': carrier.id,
+            }
+        }
 
 class RajaOngkir(models.Model):
     _inherit = 'delivery.carrier'
@@ -93,38 +111,29 @@ class RajaOngkir(models.Model):
            ('basic','Basic'),
            ('pro','Pro'),
         ],string="Tipe Akun", default="starter")
-
     raja_ongkir_origin_type = fields.Selection([
            ('city','Kabupaten/Kota'),
            ('subdistrict','Kecamatan'),
         ],string="Tipe Kota Asal", default='city')
-
     raja_ongkir_destination_type = fields.Selection([
            ('city','Kabupaten/Kota'),
            ('subdistrict','Kecamatan'),
         ],string="Tipe Kota Tujuan", default='city')
-
     raja_ongkir_city_origin_id = fields.Many2one(
         comodel_name='raja.ongkir.city',
-        string="Kabupaten / Kota Asal"
-    )
-
+        string="Kabupaten / Kota Asal")
     raja_ongkir_subdistrict_origin_id = fields.Many2one(
         comodel_name='raja.ongkir.subdistrict',
-        string="Kecamatan Asal"
-    )
+        string="Kecamatan Asal")
 
-    
     def raja_ongkir_rate_shipment(self, order):
+        return {
+            'success': True,
+            'price': order.raja_ongkir_value,
+            'error_message': False,
+            'warning_message': False,
+        }
 
-        return {'success': True,
-                'price': order.raja_ongkir_value,
-                'error_message': False,
-                'warning_message': False,                
-                }
-
-
-    
     def raja_ongkir_action_update_city(self):
         headers = {
             'key': self.raja_ongkir_api_key,
@@ -166,8 +175,6 @@ class RajaOngkir(models.Model):
         else:
             raise UserError('Something wrong. Please try again.')
 
-
-    
     def raja_ongkir_action_update_subdisctrict(self):
         cities = self.env['raja.ongkir.city'].search([])
         for city in cities:
@@ -215,10 +222,7 @@ class RajaOngkir(models.Model):
                 'target': 'current',
             }
 
-    
     def raja_ongkir_check_cost(self, order, **post):
-        logging.info(str(self.raja_ongkir_destination_type))
-        logging.info(str(order.partner_shipping_id.name))
         if self.raja_ongkir_destination_type == 'city':
             city = order.partner_shipping_id.raja_ongkir_city_id.city_id if order.partner_shipping_id.raja_ongkir_city_id else False
         else:
@@ -295,10 +299,30 @@ class RajaOngkir(models.Model):
         else:
             raise ValidationError('Only Pro Account can use this feature')
 
+    @api.constrains('delivery_type')
+    def constrains_raja_ongkir(self):
+        if self.delivery_type == 'raja_ongkir':
+            get_another_raja_ongkir = self.env['delivery.carrier'].search([('delivery_type','=','raja_ongkir'),('id','!=',self._origin.id)])
+            if get_another_raja_ongkir:
+                raise ValidationError("There is other shipping method used Raja Ongkir. Please archive/delete it first.")
+
 class ChooseDeliveryCarrier(models.TransientModel):
     _inherit = 'choose.delivery.carrier'
+
     jenis_layanan_rel = fields.Many2one('jenis.layanan',string='Jenis Layanan')
-    cost_layanan = fields.Float(string='Cost', related='jenis_layanan_rel.price', readonly=True, store=True)
+    cost_layanan = fields.Float(string='Cost', compute='compute_cost_layanan', readonly=True, store=True)
+
+    @api.depends('jenis_layanan_rel')
+    def compute_cost_layanan(self):
+        for rec in self:
+            if rec.jenis_layanan_rel:
+                if rec.currency_id.id != self.env.ref('base.IDR').id:
+                    rec.cost_layanan = self.env.ref('base.IDR').compute(rec.jenis_layanan_rel.price, rec.currency_id)
+                else:
+                    rec.cost_layanan = rec.jenis_layanan_rel.price
+            else:
+                rec.cost_layanan = 0
+
     @api.model
     def choose_layanan(self):
         self.delivery_message = False
@@ -327,25 +351,34 @@ class ChooseDeliveryCarrier(models.TransientModel):
                         else:
                             self.env['jenis.layanan'].create({'layanan':formatted_label,
                                                           'price':cost_value})
+    
     def raja_ongkir_check_cost(self, order):
-        raja_ongkir = self.env['delivery.carrier'].search([('delivery_type','=','raja_ongkir')])
-        logging.info(str(raja_ongkir.raja_ongkir_destination_type))
-        logging.info(str(order.partner_shipping_id.name))
+        # raja_ongkir = self.env['delivery.carrier'].search([('delivery_type','=','raja_ongkir')])
+        raja_ongkir = self.carrier_id
         if raja_ongkir.raja_ongkir_destination_type == 'city':
             delivery_city = order.partner_shipping_id.city
             words_city = delivery_city.split()
             if words_city and words_city[0].lower() in ['kota', 'kabupaten']:
-                find_city_code = self.env['raja.ongkir.city'].search([('name','=ilike',f"%{words_city[1]}%"),('type','=ilike',f"%{words_city[0]}%")])
-                city = find_city_code.id
+                find_city_code_1 = self.env['raja.ongkir.city'].search([('name','=ilike',f"%{words_city[1]}%")])
+                if len(find_city_code_1.ids) == 1:
+                    if find_city_code_1.type.lower() !=  words_city[0].lower():
+                        raise ValidationError(delivery_city + " is not available. Please type the correct city in your delivery address")
+                    city = find_city_code_1.id
+                else:
+                    find_city_code_2 = next(city for city in find_city_code_1 if city.type.lower() == words_city[0].lower())
+                    if find_city_code_2.type.lower() !=  words_city[0].lower():
+                        raise ValidationError(delivery_city + " is not available. Please type the correct city in your delivery address")
+                    city = find_city_code_2.id
             else :
                 find_city_code = self.env['raja.ongkir.city'].search([('name', 'ilike', f"%{delivery_city}%")])
-                logging.info(_(find_city_code))
                 city = find_city_code[0].id if delivery_city and len(find_city_code) > 0 else False
         else:
             city = order.partner_shipping_id.raja_ongkir_subdistrict_id.subdistrict_id if order.partner_shipping_id.raja_ongkir_subdistrict_id else False
-        
+
+        if not city:
+            raise ValidationError( delivery_city + " is not available. Please type the correct city in your delivery address")
+
         ekspedisi = ['jne','tiki','pos']
-        
         headers = {
             'key': raja_ongkir.raja_ongkir_api_key,
             'content-type': "application/x-www-form-urlencoded"
@@ -367,6 +400,11 @@ class ChooseDeliveryCarrier(models.TransientModel):
                 }
                 response = requests.post(raja_ongkir.raja_ongkir_get_cost_data_url(), headers=headers, data=body)
                 res= response.json()
+                if res.get('rajaongkir').get('status').get('code') == 400:
+                    if res.get('rajaongkir').get('status').get('description') == 'Bad request. Origin harus diisi':
+                        raise ValidationError('Bad request. Kabupaten/Kota Asal harus diisi')
+                    else:
+                        raise ValidationError(res.get('rajaongkir').get('status').get('description'))
                 response_list.append(res)
         else:
             for kurir in ekspedisi:
@@ -378,19 +416,28 @@ class ChooseDeliveryCarrier(models.TransientModel):
                 }
                 response = requests.post(raja_ongkir.raja_ongkir_get_cost_data_url(), headers=headers, data=body)
                 res= response.json()
+                if res.get('rajaongkir').get('status').get('code') == 400:
+                    if res.get('rajaongkir').get('status').get('description') == 'Bad request. Origin harus diisi':
+                        raise ValidationError('Bad request. Kabupaten/Kota Asal harus diisi')
+                    else:
+                        raise ValidationError(res.get('rajaongkir').get('status').get('description'))
                 response_list.append(res)
         return response_list
+    
     @api.onchange('carrier_id')
     def _onchange_carrier_id(self):
         self.delivery_message = False
         self.choose_layanan()
-        vals = self._get_shipment_rate()            
+        if not self.carrier_id and not self.order_id.partner_shipping_id.property_delivery_carrier_id:
+            raise UserError('Delivery method in delivery address cannot be empty.')
+        vals = self._get_shipment_rate()
         if self.delivery_type in ('fixed', 'base_on_rule'):
             if vals.get('error_message'):
                 return {'error': vals['error_message']}
         else:
             self.display_price = 0
             self.delivery_price = 0
+    
     def button_confirm(self):
         try:
             if self.carrier_id.delivery_type =='raja_ongkir':
@@ -403,7 +450,7 @@ class ChooseDeliveryCarrier(models.TransientModel):
                     'raja_ongkir_description' : carrier_split[1],
                     'raja_ongkir_etd' : carrier_split[2].split("[")[1].split("]")[0],
                     'raja_ongkir_city' : self.order_id.partner_shipping_id.city,
-                    'raja_ongkir_value' : self.jenis_layanan_rel.price,
+                    'raja_ongkir_value' : self.env.ref('base.IDR').compute(self.jenis_layanan_rel.price, self.currency_id),
                 })
             else:
                 self.order_id.set_delivery_line(self.carrier_id, self.delivery_price)
@@ -413,11 +460,13 @@ class ChooseDeliveryCarrier(models.TransientModel):
                 })
         except Exception as e:
             print(f"An error occurred: {str(e)}")
-        
+
 class JenisLayanan(models.Model):
     _name = 'jenis.layanan'
+
     layanan = fields.Char(string='Jenis Layanan')
     price = fields.Float(string='Cost')
+
     def name_get(self):
         result = []
         for record in self:

@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from odoo import api, fields, models, tools, _
-from odoo.exceptions import UserError, ValidationError
-import requests
-import json
+from odoo import api, fields, models, _
 
 class Partner(models.Model):
     _inherit = 'res.partner'
@@ -11,15 +6,11 @@ class Partner(models.Model):
     raja_ongkir_city_id = fields.Many2one('raja.ongkir.city', 'Raja Ongkir City')
     raja_ongkir_subdistrict_id = fields.Many2one('raja.ongkir.subdistrict', 'Raja Ongkir Subdisctrict')
 
-
     @api.model
     def _get_default_address_format(self):
         return "%(street)s\n%(street2)s\n%(city)s\n%(zip)s\n%(country_name)s"
 
-
-    
     def _display_address(self, without_company=False):
-
         '''
         The purpose of this function is to build and return an address formatted accordingly to the
         standards of the country where it belongs.

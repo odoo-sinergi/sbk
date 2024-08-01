@@ -218,9 +218,9 @@
             <field name="integration_level" position="after">
                 <field name="raja_ongkir_api_key" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')], 'required': [('delivery_type', '=', 'raja_ongkir')]}" />
                 <field name="raja_ongkir_account_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')], 'required': [('delivery_type', '=', 'raja_ongkir')]}" />
-                <field name="raja_ongkir_origin_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}" />
-                <field name="raja_ongkir_destination_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}" />
-                <field name="raja_ongkir_city_origin_id" attrs="{'invisible': ['|',('delivery_type', '!=', 'raja_ongkir'),('raja_ongkir_origin_type','=','subdistrict')]}" />
+                <field name="raja_ongkir_origin_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}" required='1'/>
+                <field name="raja_ongkir_destination_type" attrs="{'invisible': [('delivery_type', '!=', 'raja_ongkir')]}" required='1'/>
+                <field name="raja_ongkir_city_origin_id" attrs="{'invisible': ['|',('delivery_type', '!=', 'raja_ongkir'),('raja_ongkir_origin_type','=','subdistrict')]}"/>
                 <field name="raja_ongkir_subdistrict_origin_id" attrs="{'invisible': ['|',('delivery_type', '!=', 'raja_ongkir'),('raja_ongkir_origin_type','=','city')]}" />
             </field>
         </field>

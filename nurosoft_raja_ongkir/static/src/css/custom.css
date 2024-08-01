@@ -1,6 +1,6 @@
 .list-city-container {
-	position: absolute;
-	top: 75px;
+	position:relative; 
+	top:0px;
 	width: 92%;
 	z-index: 10;	
 }
